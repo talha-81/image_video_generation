@@ -754,7 +754,6 @@ def generate_images_page():
             </div>
             """, unsafe_allow_html=True)
             
-            st.balloons()
             
             navigate_to("Monitor Progress", delay=1.0)
 
@@ -1017,7 +1016,6 @@ def monitor_progress_page():
                             </div>
                             """, unsafe_allow_html=True)
                             
-                            st.balloons()
                             
                             navigate_to("My Projects", delay=1.5)
                 

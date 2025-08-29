@@ -21,8 +21,11 @@ Style: {style}
 
 Script: {script}
 
-For each scene, create a detailed image generation prompt that captures the essence of that part of the story.
-Make the prompts vivid, descriptive, and suitable for AI image generation.
+For each scene in the story, create a detailed image generation prompt that vividly captures the essence of that moment. 
+Ensure that the characters, their physical traits, outfits, and accessories remain consistent across all scenes.
+Always reference the description of characters and settings from the previous scenes to maintain continuity.
+The world, environment, lighting, and style should evolve naturally with the story while preserving the same artistic look.
+Each prompt should feel cinematic, immersive, and sequential—like frames of a movie rather than unrelated images.
 
 Return valid JSON in this exact format:
 {{
@@ -52,7 +55,7 @@ def generate_scene_prompts_openrouter(
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
-        "max_tokens": 2048,
+        "max_tokens": 3000,
     }
     
     headers = {

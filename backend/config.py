@@ -32,11 +32,11 @@ CONFIG = {
     },
     "openrouter": {
         "api_key": os.getenv("OPENROUTER_API_KEY", "your_key_here"),
-        "api_url": "https://openrouter.ai/api/v1/chat/completions",
+        "api_url": "https://api.openai.com/v1/chat/completions",
         "models": [
-            "openai/gpt-oss-20b:free",
-            "meta-llama/llama-3.1-8b-instruct:free",
-            "microsoft/phi-3-mini-128k-instruct:free"
+            "gpt-4o",
+            "gpt-4o-mini",
+            "gpt-4.1-mini"
         ]
     }
 }
