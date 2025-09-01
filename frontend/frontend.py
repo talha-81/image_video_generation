@@ -559,6 +559,7 @@ def create_story_page():
             image_models = models.get("image_models", {})
             runware_count = len(image_models.get("runware", []))
             together_count = len(image_models.get("together", []))
+            openrouter_image_count = len(image_models.get("openrouter_imgae", []))
             
             st.success(f"**AI Models:** {len(ai_models)} available")
             st.success(f"**Image Models:** {runware_count + together_count} available")
@@ -953,7 +954,7 @@ def monitor_progress_page():
                             
                             with col_regen2:
                                 # Option to try different provider
-                                alt_provider = "together" if preview["provider_used"] == "runware" else "runware"
+                                alt_provider = "together" if preview["provider_used"] == "runware" else "runware" 
                                 if st.button(
                                     f"Try {alt_provider.title()}", 
                                     key=f"alt_{preview['scene_number']}_{session_id}",

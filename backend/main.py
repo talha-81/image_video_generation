@@ -28,7 +28,8 @@ async def lifespan(app: FastAPI):
     providers = {
         "Runware": CONFIG["runware"]["api_key"] != "your_key_here",
         "Together AI": CONFIG["together"]["api_key"] != "your_key_here", 
-        "OpenRouter": CONFIG["openrouter"]["api_key"] != "your_key_here"
+        "OpenRouter": CONFIG["openrouter"]["api_key"] != "your_key_here",
+        "OpenRouter Image": CONFIG["openrouter_imgae"]["api_key"] != "your_key_here"
     }
     for name, available in providers.items():
         print(f"{'✅' if available else '❌'} {name}")
@@ -44,6 +45,10 @@ async def lifespan(app: FastAPI):
     print("  Together AI:")
     for model in CONFIG["together"]["models"]:
         print(f"  • {model}")
+    print("  OpenRouter Image:")
+    for model in CONFIG["openrouter_imgae"]["models"]:
+        print(f"  • {model}")
+
 
     yield
     print("🛑 Shutting down...")
@@ -79,7 +84,8 @@ async def get_available_models():
         "ai_models": {"openrouter": CONFIG["openrouter"]["models"]},
         "image_models": {
             "runware": CONFIG["runware"]["models"], 
-            "together": CONFIG["together"]["models"]
+            "together": CONFIG["together"]["models"],
+            "openrouter_imgae": CONFIG["openrouter_imgae"]["models"]
         }
     }
 

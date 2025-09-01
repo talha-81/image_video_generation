@@ -17,26 +17,33 @@ CONFIG = {
         "api_url": "https://api.runware.ai/v1/imageInference",
         "models": [
             "runware:101@1",
-            "runware:100@1",
-            "runware:102@1"
+            "runware:102@1",
+            "runware:103@1"
         ]
     },
     "together": {
         "api_key": os.getenv("TOGETHER_API_KEY", "your_key_here"),
         "api_url": "https://api.together.xyz/v1/images/generations",
         "models": [
+            "black-forest-labs/FLUX.1-schnell",
             "black-forest-labs/FLUX.1-schnell-Free",
-            "stabilityai/stable-diffusion-xl-base-1.0",
-            "runwayml/stable-diffusion-v1-5"
+            "black-forest-labs/FLUX.1-standard-Pro"
         ]
     },
     "openrouter": {
         "api_key": os.getenv("OPENROUTER_API_KEY", "your_key_here"),
         "api_url": "https://api.openai.com/v1/chat/completions",
         "models": [
-            "gpt-4o",
             "gpt-4o-mini",
             "gpt-4.1-mini"
+        ]
+    },
+    "openrouter_imgae": {
+        "api_key": os.getenv("OPENROUTER_API_KEY", "your_key_here"),
+        "api_url": "https://api.openai.com/v1/chat/completions",
+        "models": [
+            "google/gemini-2.5-flash-image-preview:pro",
+            "google/gemini-2.5-flash-image-preview:free"
         ]
     }
 }

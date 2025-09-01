@@ -96,6 +96,8 @@ def generate_image_with_retry(scene: ScenePrompt, provider: str, model: str) -> 
                 url = generate_image_runware(scene, model)
             elif provider == "together":
                 url = generate_image_together(scene, model)
+            elif provider == "openrouter_imgae":
+                url = generate_image_openrouter_image(scene, model)
             else:
                 url = None
                 last_error = f"Unknown provider: {provider}"
