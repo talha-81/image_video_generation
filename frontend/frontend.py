@@ -23,83 +23,191 @@ st.set_page_config(
 if "dark_theme" not in st.session_state:
     st.session_state.dark_theme = False
 
-# Dynamic CSS based on theme
+# Enhanced CSS with improved styling
 def get_theme_css():
     if st.session_state.dark_theme:
         return """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         .stApp {
-            background-color: #1e1e1e !important;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%) !important;
             color: #ffffff !important;
+            font-family: 'Inter', sans-serif !important;
         }
         
         .main-header {
-            background: linear-gradient(135deg, #4a90e2 0%, #7b68ee 50%, #9a4af3 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
             color: white;
-            padding: 2rem;
-            border-radius: 15px;
+            padding: 3rem 2rem;
+            border-radius: 20px;
             text-align: center;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(102,126,234,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+        
+        .main-header h1 {
+            font-size: 3rem !important;
+            font-weight: 700 !important;
+            margin-bottom: 0.5rem !important;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            z-index: 2;
+            position: relative;
+        }
+        
+        .main-header p {
+            font-size: 1.2rem !important;
+            font-weight: 300 !important;
+            opacity: 0.9;
+            z-index: 2;
+            position: relative;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .nav-button {
+            background: linear-gradient(145deg, #2d3748, #4a5568) !important;
+            color: #ffffff !important;
+            border: 1px solid #4a5568 !important;
+            border-radius: 12px !important;
+            padding: 0.8rem 1.5rem !important;
+            font-weight: 600 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            margin: 0.2rem 0 !important;
+        }
+        
+        .nav-button:hover {
+            background: linear-gradient(145deg, #4a5568, #667eea) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4) !important;
+        }
+        
+        .nav-button.active {
+            background: linear-gradient(145deg, #667eea, #764ba2) !important;
+            box-shadow: 0 0 20px rgba(102,126,234,0.5) !important;
         }
         
         .model-info {
-            background: linear-gradient(145deg, #2d2d2d, #3d3d3d);
+            background: linear-gradient(145deg, #2d3748, #3d4852);
             color: #ffffff;
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 0.5rem 0;
-            border-left: 4px solid #4a90e2;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
         }
         
         .success-box {
-            background: linear-gradient(145deg, #1e4d3a, #2d5a3d);
-            border: 1px solid #28a745;
-            color: #90ee90;
-            padding: 1.5rem;
-            border-radius: 10px;
+            background: linear-gradient(145deg, rgba(72,187,120,0.2), rgba(72,187,120,0.1));
+            border: 1px solid #48bb78;
+            color: #68d391;
+            padding: 2rem;
+            border-radius: 15px;
             margin: 1rem 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 20px rgba(72,187,120,0.2);
+            backdrop-filter: blur(10px);
         }
         
         .error-box {
-            background: linear-gradient(145deg, #4d1e1e, #5a2d2d);
-            border: 1px solid #dc3545;
-            color: #ffcccb;
-            padding: 1.5rem;
-            border-radius: 10px;
+            background: linear-gradient(145deg, rgba(245,101,101,0.2), rgba(245,101,101,0.1));
+            border: 1px solid #f56565;
+            color: #fc8181;
+            padding: 2rem;
+            border-radius: 15px;
             margin: 1rem 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 20px rgba(245,101,101,0.2);
+            backdrop-filter: blur(10px);
         }
         
         .scene-card {
-            border: 1px solid #444444;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            background: linear-gradient(145deg, #2d2d2d, #3d3d3d);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            background: linear-gradient(145deg, rgba(45,55,72,0.8), rgba(61,72,82,0.6));
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             color: #ffffff;
+            backdrop-filter: blur(15px);
+        }
+        
+        .scene-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border-color: rgba(102,126,234,0.3);
         }
         
         .metric-card {
-            background: linear-gradient(145deg, #2d2d2d, #3d3d3d);
+            background: linear-gradient(145deg, rgba(45,55,72,0.8), rgba(61,72,82,0.6));
             color: #ffffff;
-            padding: 1rem;
-            border-radius: 10px;
+            padding: 1.5rem;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .failed-scene {
-            background: linear-gradient(145deg, #4d1e1e, #5a2d2d);
-            border: 2px solid #dc3545;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            color: #ffcccb;
+        .custom-button {
+            background: linear-gradient(145deg, #667eea, #764ba2) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 0.8rem 2rem !important;
+            font-weight: 600 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 15px rgba(102,126,234,0.4) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .custom-button:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 10px 25px rgba(102,126,234,0.6) !important;
+            background: linear-gradient(145deg, #764ba2, #667eea) !important;
+        }
+        
+        .custom-button:active {
+            transform: translateY(-1px) !important;
+        }
+        
+        .primary-button {
+            background: linear-gradient(145deg, #f093fb, #f5576c) !important;
+            box-shadow: 0 6px 15px rgba(245,87,108,0.4) !important;
+        }
+        
+        .primary-button:hover {
+            box-shadow: 0 10px 25px rgba(245,87,108,0.6) !important;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,.2);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: loading-spin 1s ease-in-out infinite;
+            margin-right: 12px;
         }
         
         @keyframes loading-spin {
@@ -107,151 +215,226 @@ def get_theme_css():
             100% { transform: rotate(360deg); }
         }
         
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #4a90e2;
-            animation: loading-spin 1s ease-in-out infinite;
-            margin-right: 10px;
+        .stSelectbox > div > div {
+            background: rgba(45,55,72,0.8) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 10px !important;
+        }
+        
+        .stTextInput > div > div > input {
+            background: rgba(45,55,72,0.8) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 10px !important;
+            color: white !important;
+        }
+        
+        .stTextArea > div > div > textarea {
+            background: rgba(45,55,72,0.8) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 10px !important;
+            color: white !important;
+        }
+        
+        .stNumberInput > div > div > input {
+            background: rgba(45,55,72,0.8) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            border-radius: 10px !important;
+            color: white !important;
+        }
+        
+        .sidebar .nav-button {
+            width: 100% !important;
+            margin-bottom: 0.5rem !important;
+            text-align: center !important;
         }
         </style>
         """
     else:
         return """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .stApp {
+            font-family: 'Inter', sans-serif !important;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+        
         .main-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
             color: white;
-            padding: 2rem;
-            border-radius: 15px;
+            padding: 3rem 2rem;
+            border-radius: 20px;
             text-align: center;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(102,126,234,0.3);
+            position: relative;
+            overflow: hidden;
         }
-
+        
+        .main-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+        
         .main-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 3rem !important;
+            font-weight: 700 !important;
+            margin-bottom: 0.5rem !important;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            z-index: 2;
+            position: relative;
         }
-
+        
+        .main-header p {
+            font-size: 1.2rem !important;
+            font-weight: 300 !important;
+            opacity: 0.95;
+            z-index: 2;
+            position: relative;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .nav-button {
+            background: linear-gradient(145deg, #ffffff, #f7fafc) !important;
+            color: #2d3748 !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 0.8rem 1.5rem !important;
+            font-weight: 600 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+            margin: 0.2rem 0 !important;
+        }
+        
+        .nav-button:hover {
+            background: linear-gradient(145deg, #667eea, #764ba2) !important;
+            color: white !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.3) !important;
+        }
+        
+        .nav-button.active {
+            background: linear-gradient(145deg, #667eea, #764ba2) !important;
+            color: white !important;
+            box-shadow: 0 0 20px rgba(102,126,234,0.4) !important;
+        }
+        
         .model-info {
-            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 0.5rem 0;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .success-box {
-            background: linear-gradient(145deg, #d4edda, #c3e6cb);
-            border: 1px solid #28a745;
-            color: #155724;
+            background: linear-gradient(145deg, #ffffff, #f7fafc);
             padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .error-box {
-            background: linear-gradient(145deg, #f8d7da, #f5c6cb);
-            border: 1px solid #dc3545;
-            color: #721c24;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .status-generating {
-            color: #856404;
-            background: linear-gradient(145deg, #fff3cd, #ffeaa7);
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 4px solid #ffc107;
-            animation: pulse 2s infinite;
-        }
-
-        .status-complete {
-            color: #155724;
-            background: linear-gradient(145deg, #d4edda, #c3e6cb);
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 4px solid #28a745;
-        }
-
-        .scene-card {
-            border: 1px solid #dee2e6;
             border-radius: 15px;
-            padding: 1.5rem;
             margin: 1rem 0;
-            background: linear-gradient(145deg, #ffffff, #f8f9fa);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
-
+        
+        .success-box {
+            background: linear-gradient(145deg, #f0fff4, #c6f6d5);
+            border: 1px solid #48bb78;
+            color: #22543d;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            box-shadow: 0 8px 20px rgba(72,187,120,0.2);
+        }
+        
+        .error-box {
+            background: linear-gradient(145deg, #fff5f5, #fed7d7);
+            border: 1px solid #f56565;
+            color: #c53030;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            box-shadow: 0 8px 20px rgba(245,101,101,0.2);
+        }
+        
+        .scene-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            background: linear-gradient(145deg, #ffffff, #f7fafc);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         .scene-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
         }
-
+        
         .metric-card {
-            background: linear-gradient(145deg, #ffffff, #f8f9fa);
-            padding: 1rem;
-            border-radius: 10px;
+            background: linear-gradient(145deg, #ffffff, #f7fafc);
+            padding: 1.5rem;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
         }
-
-        .failed-scene {
-            background: linear-gradient(145deg, #f8d7da, #f5c6cb);
-            border: 2px solid #dc3545;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            color: #721c24;
+        
+        .custom-button {
+            background: linear-gradient(145deg, #667eea, #764ba2) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 0.8rem 2rem !important;
+            font-weight: 600 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 15px rgba(102,126,234,0.3) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
         }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+        
+        .custom-button:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 10px 25px rgba(102,126,234,0.5) !important;
+            background: linear-gradient(145deg, #764ba2, #667eea) !important;
         }
-
+        
+        .custom-button:active {
+            transform: translateY(-1px) !important;
+        }
+        
+        .primary-button {
+            background: linear-gradient(145deg, #f093fb, #f5576c) !important;
+            box-shadow: 0 6px 15px rgba(245,87,108,0.3) !important;
+        }
+        
+        .primary-button:hover {
+            box-shadow: 0 10px 25px rgba(245,87,108,0.5) !important;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(102,126,234,.2);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: loading-spin 1s ease-in-out infinite;
+            margin-right: 12px;
+        }
+        
         @keyframes loading-spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(102,126,234,.3);
-            border-radius: 50%;
-            border-top-color: #667eea;
-            animation: loading-spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-
-        .stButton > button {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 0.7rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .stButton > button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        
+        .sidebar .nav-button {
+            width: 100% !important;
+            margin-bottom: 0.5rem !important;
+            text-align: center !important;
         }
         </style>
         """
@@ -294,7 +477,7 @@ def analyze_script(script: str, title: str) -> Optional[Dict]:
 
 def start_generation(payload: Dict) -> Optional[Dict]:
     try:
-        response = requests.post(f"{API_BASE_URL}/generate-previews", json=payload, timeout=30)
+        response = requests.post(f"{API_BASE_URL}/generate-previews", json=payload, timeout=120)
         if response.status_code == 200:
             return response.json()
         else:
@@ -400,115 +583,209 @@ def go_back():
         st.session_state.current_page = st.session_state.navigation_history[-1]
         st.rerun()
 
+def start_new_project():
+    """Reset session state for a new project"""
+    st.session_state.current_project = None
+    st.session_state.current_session = None
+    st.session_state.project_created = False
+    st.session_state.project_creation_result = None
+    navigate_to("Create Story", delay=0.3)
+
 # Main Header
 st.markdown("""
 <div class="main-header">
-    <h1>Story to Image Generator</h1>
+    <h1>🎬 Story to Image Generator</h1>
     <p>Transform your stories into stunning AI-generated images using cutting-edge AI technology</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Sidebar
+# Enhanced Sidebar
 with st.sidebar:
-    st.title("Navigation")
-    
-    # Theme toggle button
+    # Theme toggle button with enhanced styling
     theme_icon = "🌙" if not st.session_state.dark_theme else "☀️"
     theme_text = "Dark Mode" if not st.session_state.dark_theme else "Light Mode"
     
-    if st.button(f"{theme_icon} {theme_text}", key="theme_toggle"):
+    if st.button(f"{theme_icon} Toggle {theme_text}", key="theme_toggle", help="Switch between light and dark themes"):
         st.session_state.dark_theme = not st.session_state.dark_theme
         st.rerun()
     
-    # Backend health check
+    st.markdown("---")
+    
+    # Backend health check with enhanced styling
     health = check_backend_health()
     if health["healthy"]:
-        st.success("Backend Online")
+        st.success("🟢 Backend Online")
         if "data" in health:
             data = health["data"]
-            st.caption(f"Active sessions: {data.get('active_sessions', 0)}")
-            st.caption(f"Total projects: {data.get('total_projects', 0)}")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Sessions", data.get('active_sessions', 0))
+            with col2:
+                st.metric("Projects", data.get('total_projects', 0))
     else:
-        st.error(f"Backend Offline: {health['error']}")
-        st.error("Please start the backend server first!")
+        st.error(f"🔴 Backend Offline")
+        st.error(f"Error: {health['error']}")
+        st.warning("Please start the backend server first!")
         st.stop()
     
-    # Navigation with current page highlighting
+    st.markdown("---")
+    st.markdown("### 🧭 Navigation")
+    
+    # Enhanced Navigation with custom styling
     pages = [
-        "Create Story",
-        "Generate Images", 
-        "Monitor Progress",
-        "My Projects"
+        ("🎭 Create Story", "Create Story"),
+        ("🎨 Generate Images", "Generate Images"), 
+        ("📊 Monitor Progress", "Monitor Progress"),
+        ("📁 My Projects", "My Projects")
     ]
     
     current_page = st.session_state.current_page
-    page = st.radio("Go to:", pages, index=pages.index(current_page) if current_page in pages else 0)
     
-    if page != st.session_state.current_page:
-        navigate_to(page, delay=0.3)
+    for page_display, page_key in pages:
+        is_active = (page_key == current_page)
+        button_class = "nav-button active" if is_active else "nav-button"
+        
+        # Create custom styled buttons
+        button_html = f"""
+        <div style="margin-bottom: 0.5rem;">
+            <button class="{button_class}" onclick="window.location.reload()" 
+                    style="width: 100%; text-align: left; font-size: 0.9rem;">
+                {page_display}
+            </button>
+        </div>
+        """
+        
+        if st.button(page_display, key=f"nav_{page_key}", use_container_width=True, 
+                    type="primary" if is_active else "secondary"):
+            if page_key != current_page:
+                navigate_to(page_key, delay=0.3)
     
-    # Back button
+    # Back button with enhanced styling
     if len(st.session_state.navigation_history) > 1:
-        if st.button("Go Back"):
+        st.markdown("---")
+        if st.button("⬅️ Go Back", use_container_width=True, help="Return to previous page"):
             go_back()
     
-    # Current project info
+    # Current project info with enhanced styling
     if st.session_state.current_project:
         st.markdown("---")
-        st.markdown("### Current Project")
+        st.markdown("### 📋 Current Project")
         project = st.session_state.current_project
-        st.info(f"**ID:** {project['project_id'][:15]}...\n\n**Words:** {project['analysis']['word_count']}")
+        
+        st.info(f"""
+        **ID:** {project['project_id'][:20]}...  
+        **Words:** {project['analysis']['word_count']}  
+        **Scenes:** {project['analysis'].get('recommended_scenes', 'N/A')}
+        """)
+        
+        if st.button("🗑️ Clear Project", use_container_width=True, help="Clear current project selection"):
+            st.session_state.current_project = None
+            st.rerun()
     
-    # Current session info
+    # Current session info with enhanced styling
     if st.session_state.current_session:
-        st.markdown("### Active Session")
-        st.info(f"**ID:** {st.session_state.current_session[:15]}...")
+        st.markdown("### ⚡ Active Session")
+        st.info(f"**ID:** {st.session_state.current_session[:20]}...")
+        
+        if st.button("🛑 End Session", use_container_width=True, help="End current generation session"):
+            st.session_state.current_session = None
+            st.rerun()
+    
+    # Quick actions
+    st.markdown("---")
+    st.markdown("### ⚡ Quick Actions")
+    if st.button("🆕 New Project", use_container_width=True, help="Start a completely new project"):
+        start_new_project()
 
 # Page: Create Story
 def create_story_page():
-    st.header("Create New Story Project")
+    st.header("🎭 Create New Story Project")
     
     col1, col2 = st.columns([2, 1])
     
     with col1:
         with st.form("script_form", clear_on_submit=False):
             title = st.text_input(
-                "Project Title*", 
+                "📝 Project Title*", 
                 placeholder="Enter a descriptive title for your story",
                 help="Give your project a memorable name"
             )
             
             script = st.text_area(
-                "Story Script*", 
+                "📖 Story Script*", 
                 height=300,
-                placeholder="Enter your story or script here...\n\nTip: The more detailed and descriptive your story, the better the AI-generated images will be!",
-                help="Paste or write your story content. Longer scripts generate more detailed scenes."
+                placeholder="Enter your story or script here...\n\nTip: The more detailed and descriptive your story, the better the AI-generated images will be!\n\nExample:\n'In a mystical forest bathed in golden sunlight, a young wizard with flowing silver robes discovers an ancient glowing crystal hidden beneath twisted oak roots. The crystal pulses with ethereal blue light, casting dancing shadows on the moss-covered ground...'",
+                help="Paste or write your story content. Longer, more descriptive scripts generate better scenes."
             )
             
-            col_form1, col_form2 = st.columns(2)
+            # Character counter
+            if script:
+                word_count = len(script.split())
+                char_count = len(script)
+                st.caption(f"📊 {word_count} words | {char_count} characters")
+                
+                # Provide feedback on script length
+                if word_count < 50:
+                    st.warning("⚠️ Script is quite short. Consider adding more details for better results.")
+                elif word_count < 100:
+                    st.info("💡 Good length! Consider adding more visual descriptions.")
+                elif word_count < 500:
+                    st.success("✅ Excellent length for detailed scene generation!")
+                else:
+                    st.success("🎯 Great! Long stories will generate rich, detailed scenes.")
+            
+            col_form1, col_form2, col_form3 = st.columns(3)
             with col_form1:
-                submitted = st.form_submit_button("Analyze Script & Create Project", use_container_width=True)
+                submitted = st.form_submit_button("🔍 Analyze & Create Project", use_container_width=True, type="primary")
             
             with col_form2:
-                clear_form = st.form_submit_button("Clear Form", use_container_width=True)
+                clear_form = st.form_submit_button("🗑️ Clear Form", use_container_width=True)
             
+            with col_form3:
+                if st.form_submit_button("📁 Load Example", use_container_width=True, help="Load a sample story"):
+                    example_story = """In the heart of an enchanted forest, where ancient oak trees stretch their gnarled branches toward a canopy of shimmering stars, lives Luna, a young sorceress with silver hair that glows like moonlight. Her emerald eyes hold the wisdom of centuries, though she appears no older than twenty.
+
+One fateful evening, as purple twilight painted the sky, Luna discovered a hidden grove where crystalline flowers bloomed with an otherworldly light. Each petal sang with harmonious chimes when touched by the gentle breeze. At the center of this magical garden stood an ornate pedestal holding a mysterious orb that pulsed with swirling galaxies inside.
+
+As Luna approached, the orb began to levitate, casting rainbow reflections across her flowing indigo robes. The ground beneath her feet sparkled with stardust, and the air filled with floating luminous particles. She reached out with trembling hands, knowing this moment would change her destiny forever.
+
+When her fingertips touched the orb's surface, visions of distant realms flashed before her eyes - floating cities among the clouds, underwater kingdoms with coral spires, and mountain peaks crowned with phoenix nests. The magic within her awakened, and golden light began to emanate from her entire being.
+
+With newfound power coursing through her veins, Luna realized she had become the guardian of the cosmic balance, destined to protect all realms from the encroaching darkness that threatened to consume the multiverse."""
+                    
+                    # This will update the form fields, but since we can't directly modify form inputs,
+                    # we'll store it in session state and rerun
+                    st.session_state.example_story = example_story
+                    st.session_state.example_title = "Luna and the Cosmic Orb"
+                    st.rerun()
+                
             if clear_form:
+                if 'example_story' in st.session_state:
+                    del st.session_state.example_story
+                if 'example_title' in st.session_state:
+                    del st.session_state.example_title
                 st.rerun()
+                
+            # Handle example loading
+            if 'example_story' in st.session_state and 'example_title' in st.session_state:
+                st.info("📝 Example story loaded! Click 'Analyze & Create Project' to proceed.")
+                script = st.session_state.example_story
+                title = st.session_state.example_title
                 
             if submitted:
                 if not title.strip():
-                    st.error("Please provide a project title")
+                    st.error("❌ Please provide a project title")
                     return
                     
                 if not script.strip():
-                    st.error("Please provide a story script")
+                    st.error("❌ Please provide a story script")
                     return
                 
                 if len(script.split()) < 10:
-                    st.error("Script too short. Please provide at least 10 words for analysis.")
+                    st.error("❌ Script too short. Please provide at least 10 words for meaningful analysis.")
                     return
                 
-                with st.spinner("Analyzing script and creating project..."):
+                with st.spinner("🔍 Analyzing script and creating project..."):
                     result = analyze_script(script.strip(), title.strip())
                 
                 if result:
@@ -516,9 +793,15 @@ def create_story_page():
                     st.session_state.project_created = True
                     st.session_state.project_creation_result = result
                     
+                    # Clear example if it was used
+                    if 'example_story' in st.session_state:
+                        del st.session_state.example_story
+                    if 'example_title' in st.session_state:
+                        del st.session_state.example_title
+                    
                     st.markdown(f"""
                     <div class="success-box">
-                        <h3>Project Created Successfully!</h3>
+                        <h3>🎉 Project Created Successfully!</h3>
                         <p><strong>Project ID:</strong> {result['project_id']}</p>
                         <p><strong>Word Count:</strong> {result['analysis']['word_count']} words</p>
                         <p><strong>Recommended Scenes:</strong> {result['analysis']['recommended_scenes']} scenes</p>
@@ -527,96 +810,139 @@ def create_story_page():
                     </div>
                     """, unsafe_allow_html=True)
 
-                    
-                    navigate_to("Generate Images", delay=1.0)
+                    time.sleep(2)
+                    navigate_to("Generate Images", delay=0.5)
     
     with col2:
-        st.markdown("### Tips for Better Results")
-        st.info("""
-        **Writing Tips:**
-        • Use descriptive language with visual details
-        • Include character descriptions and settings
-        • Break your story into clear scenes
-        • Mention colors, lighting, and mood
+        st.markdown("### 💡 Tips for Better Results")
         
-        **Script Length Guide:**
-        • **Short (50-100 words):** 2-3 scenes
-        • **Medium (100-500 words):** 4-6 scenes  
-        • **Long (500+ words):** 6-10 scenes
+        with st.expander("✍️ Writing Tips", expanded=True):
+            st.info("""
+            **🎨 Visual Descriptions:**
+            • Use rich, descriptive language
+            • Include colors, lighting, and atmosphere
+            • Describe characters' appearance and clothing
+            • Set vivid scenes and environments
+            
+            **📝 Structure Tips:**
+            • Break your story into clear scenes
+            • Include dialogue and action
+            • Mention specific details and props
+            • Describe emotions and mood
+            """)
         
-        **Style Recommendations:**
-        • **Cinematic:** Movie-like dramatic scenes
-        • **Cartoon:** Animated, colorful style
-        • **Realistic:** Photo-realistic images
-        • **Artistic:** Creative interpretation
-        """)
+        with st.expander("📏 Length Guidelines"):
+            st.info("""
+            **Script Length Guide:**
+            • **Short (50-100 words):** 2-4 scenes
+            • **Medium (100-300 words):** 4-8 scenes  
+            • **Long (300-500 words):** 8-12 scenes
+            • **Epic (500+ words):** 12+ scenes
+            
+            **Quality over Quantity:**
+            Detailed descriptions create better images than long but vague text.
+            """)
         
+        with st.expander("🎭 Style Examples"):
+            st.info("""
+            **🎬 Cinematic:** Movie-like dramatic scenes
+            • "The camera pans across..."
+            • "Close-up of character's eyes..."
+            
+            **🎨 Cartoon:** Animated, colorful style
+            • "Vibrant colors pop against..."
+            • "Exaggerated expressions..."
+            
+            **📸 Realistic:** Photo-realistic images
+            • "Natural lighting reveals..."
+            • "Detailed textures show..."
+            
+            **🖼️ Artistic:** Creative interpretation
+            • "Painterly brushstrokes..."
+            • "Abstract representation of..."
+            """)
+        
+        # Show available models info
         if st.session_state.available_models:
             models = st.session_state.available_models
-            st.markdown("### Available AI Models")
             
-            ai_models = models.get("ai_models", {}).get("openrouter", [])
-            image_models = models.get("image_models", {})
-            runware_count = len(image_models.get("runware", []))
-            together_count = len(image_models.get("together", []))
-            openrouter_image_count = len(image_models.get("openrouter_imgae", []))
-            
-            st.success(f"**AI Models:** {len(ai_models)} available")
-            st.success(f"**Image Models:** {runware_count + together_count} available")
+            with st.expander("🤖 Available AI Models"):
+                ai_models = models.get("ai_models", {}).get("openrouter", [])
+                image_models = models.get("image_models", {})
+                runware_count = len(image_models.get("runware", []))
+                together_count = len(image_models.get("together", []))
+                openrouter_image_count = len(image_models.get("openrouter_imgae", []))
+                
+                st.success(f"**🧠 AI Models:** {len(ai_models)} available")
+                st.success(f"**🎨 Runware Models:** {runware_count} available")
+                st.success(f"**🔧 Together AI Models:** {together_count} available")
+                st.success(f"**🌐 OpenRouter Image Models:** {openrouter_image_count} available")
 
 # Page: Generate Images
 def generate_images_page():
-    st.header("Generate Images from Story")
+    st.header("🎨 Generate Images from Story")
     
     # Show project creation success message if just created
     if st.session_state.project_creation_result:
         result = st.session_state.project_creation_result
         st.markdown(f"""
         <div class="success-box">
-            <h3>Project Ready for Image Generation!</h3>
+            <h3>🚀 Project Ready for Image Generation!</h3>
             <p><strong>Project ID:</strong> {result['project_id']}</p>
             <p><strong>Word Count:</strong> {result['analysis']['word_count']} words</p>
             <p><strong>Recommended Scenes:</strong> {result['analysis']['recommended_scenes']} scenes</p>
             <p><strong>Estimated Duration:</strong> {result['analysis']['estimated_duration_minutes']:.1f} minutes</p>
             <p><strong>Complexity:</strong> {result['analysis']['complexity_score']}</p>
         </div>
-        """, unsafe_allow_html=True) # Clear after showing
+        """, unsafe_allow_html=True)
+        # Clear after showing
+        st.session_state.project_creation_result = None
     
     # Project selection
     if not st.session_state.current_project:
-        st.warning("No project selected. Please create a project first or select from existing projects.")
+        st.warning("⚠️ No project selected. Please create a project first or select from existing projects.")
+        
+        col_action1, col_action2 = st.columns(2)
+        with col_action1:
+            if st.button("🆕 Create New Project", use_container_width=True, type="primary"):
+                navigate_to("Create Story")
+        with col_action2:
+            if st.button("📁 View My Projects", use_container_width=True):
+                navigate_to("My Projects")
         
         projects = load_projects()
         if projects and "projects" in projects and projects["projects"]:
-            st.markdown("### Select from Existing Projects")
+            st.markdown("### 📂 Select from Recent Projects")
             
-            for project in projects["projects"][:5]:
-                col1, col2, col3 = st.columns([3, 1, 1])
-                
-                with col1:
-                    st.write(f"**{project['project_id']}**")
-                    st.caption(f"Words: {project['analysis'].get('word_count', 0)} | "
-                             f"Scenes: {project['analysis'].get('recommended_scenes', 0)}")
-                
-                with col2:
-                    if st.button("Select", key=f"select_{project['project_id']}"):
-                        st.session_state.current_project = project
-                        st.success(f"Selected: {project['project_id']}")
-                        st.rerun()
-                
-                with col3:
-                    if st.button("View", key=f"view_{project['project_id']}"):
-                        navigate_to("My Projects")
+            for i, project in enumerate(projects["projects"][:5]):
+                with st.expander(f"📄 {project['project_id']}", expanded=(i == 0)):
+                    col1, col2, col3 = st.columns([2, 1, 1])
+                    
+                    with col1:
+                        st.write(f"**Words:** {project['analysis'].get('word_count', 0)}")
+                        st.write(f"**Recommended Scenes:** {project['analysis'].get('recommended_scenes', 0)}")
+                        st.write(f"**Complexity:** {project['analysis'].get('complexity_score', 'N/A')}")
+                    
+                    with col2:
+                        if st.button("✅ Select", key=f"select_{project['project_id']}", use_container_width=True):
+                            st.session_state.current_project = project
+                            st.success(f"Selected: {project['project_id'][:20]}...")
+                            time.sleep(1)
+                            st.rerun()
+                    
+                    with col3:
+                        if st.button("👁️ View", key=f"view_{project['project_id']}", use_container_width=True):
+                            navigate_to("My Projects")
         
         # Manual project ID entry
-        with st.expander("Advanced: Enter Project ID Manually"):
+        with st.expander("🔧 Advanced: Enter Project ID Manually"):
             manual_project_id = st.text_input(
                 "Project ID:", 
                 placeholder="story_20241201_123456",
                 help="Enter the exact project ID if you know it"
             )
             
-            if manual_project_id and st.button("Load Project"):
+            if manual_project_id and st.button("📥 Load Project", use_container_width=True):
                 try:
                     response = requests.get(f"{API_BASE_URL}/projects/{manual_project_id}", timeout=30)
                     if response.status_code == 200:
@@ -625,109 +951,177 @@ def generate_images_page():
                             "project_id": manual_project_id,
                             "analysis": {"word_count": len(project_data["script"].split())}
                         }
-                        st.success(f"Loaded project: {manual_project_id}")
+                        st.success(f"✅ Loaded project: {manual_project_id}")
+                        time.sleep(1)
                         st.rerun()
                     else:
-                        st.error(f"Project not found: {manual_project_id}")
+                        st.error(f"❌ Project not found: {manual_project_id}")
                 except Exception as e:
-                    st.error(f"Error loading project: {str(e)}")
+                    st.error(f"❌ Error loading project: {str(e)}")
         
         return
     
     # Show current project
     project = st.session_state.current_project
-    st.success(f"**Current Project:** {project['project_id']} ({project['analysis']['word_count']} words)")
+    st.success(f"📋 **Current Project:** {project['project_id']} ({project['analysis']['word_count']} words)")
     
     # Model selection
     models = st.session_state.available_models
     if not models:
-        st.error("Failed to load available models. Please check backend connection.")
+        st.error("❌ Failed to load available models. Please check backend connection.")
         return
     
-    st.markdown("### Generation Settings")
+    st.markdown("### ⚙️ Generation Settings")
     
-    col1, col2, col3 = st.columns(3)
+    # Enhanced settings layout with 4 columns
+    col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        st.markdown("#### AI Scene Analysis")
+        st.markdown("#### 🧠 AI Scene Analysis")
         
         ai_models = models.get("ai_models", {}).get("openrouter", [])
         if ai_models:
             ai_model = st.selectbox("AI Model:", ai_models, help="Choose AI model for scene analysis")
             
+            # Enhanced model descriptions
             model_descriptions = {
-                "openai/gpt-oss-20b:free": "Fast and efficient for scene analysis",
-                "meta-llama/llama-3.1-8b-instruct:free": "Creative and detailed descriptions",
-                "microsoft/phi-3-mini-128k-instruct:free": "Balanced performance and creativity"
+                "gpt-4o-mini": "💡 Fast and efficient GPT-4 Omni Mini",
+                "gpt-4.1-mini": "⚡ Advanced GPT-4.1 Mini model",
+                "openai/gpt-4o-mini": "🚀 OpenAI GPT-4 Omni optimized",
+                "meta-llama/llama-3.1-8b-instruct:free": "🦙 Creative Llama 3.1 (Free)",
+                "microsoft/phi-3-mini-128k-instruct:free": "🔧 Microsoft Phi-3 (Free)"
             }
             
             if ai_model in model_descriptions:
                 st.info(model_descriptions[ai_model])
+            else:
+                st.info("🤖 Selected AI model for scene generation")
         else:
-            st.warning("No AI models available, using fallback")
+            st.warning("⚠️ No AI models available, using fallback")
             ai_model = "fallback"
     
     with col2:
-        st.markdown("#### Image Generation")
+        st.markdown("#### 🎨 Image Generation")
         
-        image_provider = st.selectbox("Image Provider:", ["runware", "together"])
+        # Include all three providers including OpenRouter Image
+        image_provider = st.selectbox("Image Provider:", ["runware", "together", "openrouter_imgae"])
         
         if image_provider == "runware":
             runware_models = models.get("image_models", {}).get("runware", [])
             if runware_models:
                 image_model = st.selectbox("Runware Model:", runware_models)
-                st.info("High-quality, fast generation")
+                st.info("🚀 High-quality, fast generation")
             else:
-                st.error("No Runware models available")
+                st.error("❌ No Runware models available")
                 return
-        else:
+        elif image_provider == "together":
             together_models = models.get("image_models", {}).get("together", [])
             if together_models:
                 image_model = st.selectbox("Together Model:", together_models)
-                st.info("Diverse model options")
+                st.info("🔧 Diverse model options with FLUX")
             else:
-                st.error("No Together AI models available")
+                st.error("❌ No Together AI models available")
+                return
+        else:  # openrouter_imgae
+            openrouter_image_models = models.get("image_models", {}).get("openrouter_imgae", [])
+            if openrouter_image_models:
+                image_model = st.selectbox("OpenRouter Image Model:", openrouter_image_models)
+                st.info("🌐 Advanced Gemini vision models")
+            else:
+                st.error("❌ No OpenRouter image models available")
                 return
     
     with col3:
-        st.markdown("#### Scene Settings")
-        
-        num_scenes = st.number_input(
-            "Number of scenes:", 
-            min_value=1, 
-            max_value=10, 
-            value=min(project['analysis'].get('recommended_scenes', 4), 8),
-            help="More scenes = more detailed story breakdown"
-        )
+        st.markdown("#### 🎭 Visual Style")
         
         media_type = st.selectbox("Visual Style:", [
             "cinematic", "cartoon", "realistic", "artistic"
         ], help="Choose the visual style for your images")
+        
+        # Enhanced style preview with emojis
+        style_descriptions = {
+            "cinematic": "🎬 Movie-like with dramatic lighting",
+            "cartoon": "🎨 Vibrant animated style with bold colors", 
+            "realistic": "📸 Photorealistic with natural lighting",
+            "artistic": "🖼️ Creative artistic interpretation"
+        }
+        
+        st.info(style_descriptions.get(media_type, 'Custom style selected'))
     
-    # Style preview
-    style_descriptions = {
-        "cinematic": "**Cinematic:** Movie-like with dramatic lighting and professional composition",
-        "cartoon": "**Cartoon:** Vibrant animated style with bold colors and expressive characters", 
-        "realistic": "**Realistic:** Photorealistic appearance with natural lighting and detailed textures",
-        "artistic": "**Artistic:** Creative artistic interpretation with painterly quality"
-    }
+    with col4:
+        st.markdown("#### 📊 Scene Count")
+        
+        # Enhanced scene input with no maximum limit
+        recommended_scenes = project['analysis'].get('recommended_scenes', 4)
+        
+        num_scenes = st.number_input(
+            "Number of scenes:", 
+            min_value=1, 
+            max_value=50,  # Increased from 10 to 50
+            value=recommended_scenes,
+            help=f"Recommended: {recommended_scenes} scenes based on your story length. You can generate up to 50 scenes!"
+        )
+        
+        # Scene count feedback
+        if num_scenes <= recommended_scenes:
+            st.success(f"✅ Optimal count")
+        elif num_scenes <= recommended_scenes + 3:
+            st.info(f"💡 Good for detailed breakdown")
+        else:
+            st.warning(f"⚠️ Many scenes - longer generation time")
     
-    st.markdown(f"**Selected Style:** {style_descriptions.get(media_type, 'Custom style selected')}")
+    # Enhanced style preview section
+    st.markdown("---")
+    st.markdown("### 🎨 Selected Configuration Preview")
     
-    # Navigation buttons
-    col_nav1, col_nav2, col_nav3 = st.columns(3)
+    config_col1, config_col2, config_col3 = st.columns(3)
+    
+    with config_col1:
+        st.markdown(f"""
+        <div class="metric-card">
+            <h4>🧠 AI Analysis</h4>
+            <p><strong>{ai_model}</strong></p>
+            <small>Scene generation & prompts</small>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with config_col2:
+        st.markdown(f"""
+        <div class="metric-card">
+            <h4>🎨 Image Provider</h4>
+            <p><strong>{image_provider.title()}</strong></p>
+            <small>{image_model}</small>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with config_col3:
+        st.markdown(f"""
+        <div class="metric-card">
+            <h4>🎭 Style & Scenes</h4>
+            <p><strong>{media_type.title()}</strong></p>
+            <small>{num_scenes} scenes to generate</small>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Enhanced navigation and action buttons
+    st.markdown("---")
+    col_nav1, col_nav2, col_nav3, col_nav4 = st.columns(4)
     
     with col_nav1:
-        if st.button("Back to Create Story", use_container_width=True):
+        if st.button("⬅️ Back to Create Story", use_container_width=True):
             navigate_to("Create Story")
     
     with col_nav2:
-        if st.button("Clear Project", use_container_width=True):
+        if st.button("🗑️ Clear Project", use_container_width=True):
             st.session_state.current_project = None
             st.rerun()
     
     with col_nav3:
-        generate_clicked = st.button("Generate Scene Previews", use_container_width=True, type="primary")
+        if st.button("📁 My Projects", use_container_width=True):
+            navigate_to("My Projects")
+    
+    with col_nav4:
+        generate_clicked = st.button("🚀 Generate Scene Previews", use_container_width=True, type="primary")
     
     if generate_clicked:
         payload = {
@@ -740,7 +1134,7 @@ def generate_images_page():
             "image_model": image_model,
         }
         
-        with st.spinner("Starting generation process..."):
+        with st.spinner("🚀 Starting generation process..."):
             result = start_generation(payload)
         
         if result:
@@ -748,172 +1142,237 @@ def generate_images_page():
             
             st.markdown(f"""
             <div class="success-box">
-                <h3>Generation Started Successfully!</h3>
+                <h3>🎉 Generation Started Successfully!</h3>
                 <p><strong>Session ID:</strong> {result['session_id']}</p>
                 <p><strong>Total Scenes:</strong> {result['total_scenes']}</p>
                 <p><strong>Status:</strong> {result['status'].title()}</p>
+                <p><strong>Provider:</strong> {image_provider.title()}</p>
+                <p><strong>Style:</strong> {media_type.title()}</p>
             </div>
             """, unsafe_allow_html=True)
             
-            
-            navigate_to("Monitor Progress", delay=1.0)
+            time.sleep(2)
+            navigate_to("Monitor Progress", delay=0.5)
 
-# Page: Monitor Progress
+# Page: Monitor Progress (Enhanced)
 def monitor_progress_page():
-    st.header("Monitor Generation Progress")
+    st.header("📊 Monitor Generation Progress")
     
     # Session selection
     if st.session_state.current_session:
         session_id = st.text_input(
-            "Session ID:", 
+            "🔍 Session ID:", 
             value=st.session_state.current_session,
             help="Current active session"
         )
     else:
         session_id = st.text_input(
-            "Session ID:", 
+            "🔍 Session ID:", 
             placeholder="session_abcd1234",
             help="Enter session ID to monitor"
         )
     
     if not session_id:
-        st.info("Enter a session ID to monitor progress")
+        st.info("💡 Enter a session ID to monitor progress")
         
-        if st.button("Back to Generate Images"):
-            navigate_to("Generate Images")
+        col_back1, col_back2 = st.columns(2)
+        with col_back1:
+            if st.button("⬅️ Back to Generate Images", use_container_width=True):
+                navigate_to("Generate Images")
+        with col_back2:
+            if st.button("📁 My Projects", use_container_width=True):
+                navigate_to("My Projects")
         return
     
-    # Control buttons
-    col1, col2, col3, col4 = st.columns(4)
+    # Enhanced control buttons
+    col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
-        auto_refresh = st.checkbox("Auto-refresh", value=True, help="Automatically update every 1.5 seconds")
+        auto_refresh = st.checkbox("🔄 Auto-refresh", value=True, help="Automatically update every 1.5 seconds")
     
     with col2:
-        manual_refresh = st.button("Check Status", help="Manually check current status")
+        manual_refresh = st.button("📊 Check Status", help="Manually check current status")
     
     with col3:
-        if st.button("Back to Generate"):
+        if st.button("⬅️ Back to Generate"):
             navigate_to("Generate Images")
     
     with col4:
-        if st.button("Clear Session"):
+        if st.button("🗑️ Clear Session"):
             st.session_state.current_session = None
             st.rerun()
+    
+    with col5:
+        if st.button("🆕 New Project"):
+            start_new_project()
     
     if manual_refresh or auto_refresh:
         status = get_generation_status(session_id)
         
         if not status:
-            st.error("Session not found or expired")
-            if st.button("Try Different Session"):
-                st.session_state.current_session = None
-                st.rerun()
+            st.error("❌ Session not found or expired")
+            col_error1, col_error2 = st.columns(2)
+            with col_error1:
+                if st.button("🔄 Try Different Session", use_container_width=True):
+                    st.session_state.current_session = None
+                    st.rerun()
+            with col_error2:
+                if st.button("🆕 Start New Project", use_container_width=True):
+                    start_new_project()
             return
         
-        # Progress display
+        # Enhanced progress display
         progress = status["completed_scenes"] / max(status["total_scenes"], 1)
-        st.progress(progress, text=f"Progress: {status['completed_scenes']}/{status['total_scenes']} scenes")
+        st.progress(progress, text=f"Progress: {status['completed_scenes']}/{status['total_scenes']} scenes ({progress*100:.1f}%)")
         
-        # Status metrics
-        col1, col2, col3, col4 = st.columns(4)
+        # Enhanced status metrics with better styling
+        col1, col2, col3, col4, col5 = st.columns(5)
         
         with col1:
-            status_color = {"generating": "🟡", "previewing": "🔵", "completed": "🟢", "failed": "🔴"}
+            status_icons = {"generating": "🟡", "previewing": "🔵", "completed": "🟢", "failed": "🔴"}
+            status_colors = {"generating": "#FFA500", "previewing": "#4169E1", "completed": "#32CD32", "failed": "#FF4500"}
+            current_status = status['status']
+            
             st.markdown(f"""
             <div class="metric-card">
-                <h3>{status_color.get(status['status'], '⚪')} Status</h3>
-                <p><strong>{status['status'].title()}</strong></p>
+                <h3>{status_icons.get(current_status, '⚪')} Status</h3>
+                <p style="color: {status_colors.get(current_status, '#666')}"><strong>{current_status.title()}</strong></p>
             </div>
             """, unsafe_allow_html=True)
         
         with col2:
+            completion_percent = int(progress * 100)
             st.markdown(f"""
             <div class="metric-card">
-                <h3>Progress</h3>
+                <h3>📊 Progress</h3>
                 <p><strong>{status['completed_scenes']}/{status['total_scenes']}</strong></p>
+                <small>{completion_percent}% complete</small>
             </div>
             """, unsafe_allow_html=True)
         
         with col3:
             st.markdown(f"""
             <div class="metric-card">
-                <h3>Total Scenes</h3>
+                <h3>🎬 Total Scenes</h3>
                 <p><strong>{status['total_scenes']}</strong></p>
+                <small>Images to generate</small>
             </div>
             """, unsafe_allow_html=True)
         
         with col4:
             error_count = len(status.get("errors", []))
-            error_color = "🔴" if error_count > 0 else "🟢"
+            error_color = "#FF4500" if error_count > 0 else "#32CD32"
+            error_icon = "🔴" if error_count > 0 else "🟢"
+            
             st.markdown(f"""
             <div class="metric-card">
-                <h3>{error_color} Errors</h3>
-                <p><strong>{error_count}</strong></p>
+                <h3>{error_icon} Errors</h3>
+                <p style="color: {error_color}"><strong>{error_count}</strong></p>
+                <small>Generation issues</small>
             </div>
             """, unsafe_allow_html=True)
         
-        # Show errors if any
+        with col5:
+            # Estimate time remaining
+            if status["status"] == "generating" and status["completed_scenes"] > 0:
+                avg_time_per_scene = 30  # Estimated seconds per scene
+                remaining_scenes = status["total_scenes"] - status["completed_scenes"]
+                estimated_remaining = remaining_scenes * avg_time_per_scene
+                
+                if estimated_remaining < 60:
+                    time_text = f"{estimated_remaining:.0f}s"
+                else:
+                    time_text = f"{estimated_remaining/60:.1f}m"
+                
+                st.markdown(f"""
+                <div class="metric-card">
+                    <h3>⏱️ Est. Time</h3>
+                    <p><strong>{time_text}</strong></p>
+                    <small>Remaining</small>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <h3>⏱️ Session</h3>
+                    <p><strong>Active</strong></p>
+                    <small>Generation session</small>
+                </div>
+                """, unsafe_allow_html=True)
+        
+        # Enhanced error display
         if status.get("errors"):
-            with st.expander(f"View Errors ({len(status['errors'])})", expanded=True):
+            with st.expander(f"⚠️ View Errors ({len(status['errors'])})", expanded=len(status['errors']) > 0):
                 for i, error in enumerate(status["errors"], 1):
                     st.error(f"**Error {i}:** {error}")
         
-        # Show generation status
+        # Enhanced generation status messages
         if status["status"] == "generating":
             st.markdown("""
-            <div class="status-generating">
-                <h3>Generation In Progress</h3>
+            <div class="success-box" style="background: linear-gradient(145deg, rgba(255,193,7,0.2), rgba(255,193,7,0.1)); border-color: #FFC107; color: #FF8F00;">
+                <h3>🚀 Generation In Progress</h3>
                 <p>AI is creating your scene images. This may take several minutes depending on the number of scenes and model complexity.</p>
+                <p><strong>💡 Tip:</strong> You can safely close this tab and return later - your session will continue running!</p>
             </div>
             """, unsafe_allow_html=True)
         
-        # Show previews
+        # Enhanced previews display
         if status["previews"]:
             st.markdown("---")
-            st.subheader("Generated Previews")
+            st.subheader("🖼️ Generated Previews")
             
             # Approval section for completed generation
             if status["status"] in ["previewing", "completed"]:
                 
-                # Display previews in a grid
-                cols = st.columns(min(3, len(status["previews"])))
+                # Sort previews by scene number for consistent display
+                sorted_previews = sorted(status["previews"], key=lambda x: x["scene_number"])
+                
+                # Display previews in an enhanced grid
+                cols_per_row = 2  # Reduced for better mobile experience
                 approvals = {}
                 regenerate_requests = {}
                 
-                for i, preview in enumerate(status["previews"]):
-                    with cols[i % 3]:
+                for i, preview in enumerate(sorted_previews):
+                    if i % cols_per_row == 0:
+                        cols = st.columns(cols_per_row)
+                    
+                    with cols[i % cols_per_row]:
                         st.markdown(f"""
                         <div class="scene-card">
-                            <h4>Scene {preview['scene_number']}: {preview['scene_title']}</h4>
+                            <h4>🎬 Scene {preview['scene_number']}: {preview['scene_title']}</h4>
                         </div>
                         """, unsafe_allow_html=True)
                         
                         if preview["preview_url"]:
                             st.image(preview["preview_url"], use_container_width=True)
                             
-                            # Approval checkbox
-                            approvals[str(preview["scene_number"])] = st.checkbox(
-                                f"Save Scene {preview['scene_number']}", 
-                                value=True,
-                                key=f"approve_{preview['scene_number']}_{session_id}",
-                                help="Check to include this scene in final output"
-                            )
+                            # Enhanced approval section
+                            col_approve, col_regen = st.columns(2)
                             
-                            # Regenerate button
-                            if st.button(
-                                "Regenerate", 
-                                key=f"regen_{preview['scene_number']}_{session_id}",
-                                help="Generate a new version of this scene",
-                                use_container_width=True
-                            ):
-                                regenerate_requests[preview["scene_number"]] = {
-                                    "provider": preview["provider_used"],
-                                    "model": preview["model_used"]
-                                }
+                            with col_approve:
+                                # Approval checkbox
+                                approvals[str(preview["scene_number"])] = st.checkbox(
+                                    f"✅ Save Scene {preview['scene_number']}", 
+                                    value=True,
+                                    key=f"approve_{preview['scene_number']}_{session_id}",
+                                    help="Check to include this scene in final output"
+                                )
                             
-                            # Scene details
-                            with st.expander(f"Scene {preview['scene_number']} Details"):
+                            with col_regen:
+                                # Regenerate button
+                                if st.button(
+                                    "🔄 Regenerate", 
+                                    key=f"regen_{preview['scene_number']}_{session_id}",
+                                    help="Generate a new version of this scene",
+                                    use_container_width=True
+                                ):
+                                    regenerate_requests[preview["scene_number"]] = {
+                                        "provider": preview["provider_used"],
+                                        "model": preview["model_used"]
+                                    }
+                            
+                            # Enhanced scene details
+                            with st.expander(f"📋 Scene {preview['scene_number']} Details"):
                                 st.text_area(
                                     "Image Prompt:", 
                                     preview['prompt'], 
@@ -921,30 +1380,37 @@ def monitor_progress_page():
                                     disabled=True,
                                     key=f"prompt_{preview['scene_number']}_{session_id}"
                                 )
-                                st.caption(f"Generation time: {preview['generation_time']:.1f}s")
-                                st.caption(f"Provider: {preview['provider_used']}")
-                                st.caption(f"Model: {preview['model_used']}")
+                                
+                                detail_col1, detail_col2 = st.columns(2)
+                                with detail_col1:
+                                    st.caption(f"⏱️ Generation time: {preview['generation_time']:.1f}s")
+                                    st.caption(f"🏢 Provider: {preview['provider_used']}")
+                                with detail_col2:
+                                    st.caption(f"🤖 Model: {preview['model_used']}")
+                                    if preview.get('approved'):
+                                        st.caption("✅ Approved for saving")
                                 
                                 if preview.get('error'):
-                                    st.error(f"Error: {preview['error']}")
+                                    st.error(f"❌ Error: {preview['error']}")
                         else:
-                            # Failed scene with regeneration option
+                            # Enhanced failed scene display
                             st.markdown(f"""
-                            <div class="failed-scene">
-                                <h4>Generation Failed</h4>
+                            <div class="error-box">
+                                <h4>❌ Generation Failed</h4>
                                 <p><strong>Scene {preview['scene_number']}:</strong> {preview['scene_title']}</p>
                                 <p><strong>Error:</strong> {preview.get('error', 'Unknown error occurred')}</p>
+                                <p><strong>Provider:</strong> {preview['provider_used']} | <strong>Model:</strong> {preview['model_used']}</p>
                             </div>
                             """, unsafe_allow_html=True)
                             
-                            # Regenerate button for failed scenes
-                            col_regen1, col_regen2 = st.columns(2)
+                            # Enhanced regeneration options for failed scenes
+                            col_regen1, col_regen2, col_regen3 = st.columns(3)
                             
                             with col_regen1:
                                 if st.button(
-                                    f"Retry Scene {preview['scene_number']}", 
+                                    f"🔄 Retry Same", 
                                     key=f"retry_{preview['scene_number']}_{session_id}",
-                                    help="Try generating this scene again",
+                                    help="Try generating this scene again with same provider",
                                     use_container_width=True
                                 ):
                                     regenerate_requests[preview["scene_number"]] = {
@@ -953,11 +1419,18 @@ def monitor_progress_page():
                                     }
                             
                             with col_regen2:
-                                # Option to try different provider
-                                alt_provider = "together" if preview["provider_used"] == "runware" else "runware" 
+                                # Try alternative provider
+                                current_provider = preview["provider_used"]
+                                if current_provider == "runware":
+                                    alt_provider = "together"
+                                elif current_provider == "together":
+                                    alt_provider = "openrouter_imgae"
+                                else:
+                                    alt_provider = "runware"
+                                
                                 if st.button(
-                                    f"Try {alt_provider.title()}", 
-                                    key=f"alt_{preview['scene_number']}_{session_id}",
+                                    f"🔧 Try {alt_provider.title()}", 
+                                    key=f"alt1_{preview['scene_number']}_{session_id}",
                                     help=f"Try generating with {alt_provider} instead",
                                     use_container_width=True
                                 ):
@@ -970,11 +1443,33 @@ def monitor_progress_page():
                                             "model": alt_models[0]
                                         }
                             
+                            with col_regen3:
+                                # Try third provider option
+                                current_provider = preview["provider_used"]
+                                providers = ["runware", "together", "openrouter_imgae"]
+                                available_providers = [p for p in providers if p != current_provider]
+                                
+                                if len(available_providers) > 1:
+                                    third_provider = available_providers[1]
+                                    if st.button(
+                                        f"🌐 Try {third_provider.title()}", 
+                                        key=f"alt2_{preview['scene_number']}_{session_id}",
+                                        help=f"Try generating with {third_provider} instead",
+                                        use_container_width=True
+                                    ):
+                                        models = st.session_state.available_models
+                                        alt_models = models.get("image_models", {}).get(third_provider, [])
+                                        if alt_models:
+                                            regenerate_requests[preview["scene_number"]] = {
+                                                "provider": third_provider,
+                                                "model": alt_models[0]
+                                            }
+                            
                             approvals[str(preview["scene_number"])] = False
                 
-                # Handle regeneration requests
+                # Handle regeneration requests with enhanced feedback
                 for scene_num, regen_info in regenerate_requests.items():
-                    with st.spinner(f"Regenerating scene {scene_num}..."):
+                    with st.spinner(f"🔄 Regenerating scene {scene_num} with {regen_info['provider']}..."):
                         regen_result = regenerate_scene(
                             session_id, 
                             scene_num,
@@ -983,76 +1478,128 @@ def monitor_progress_page():
                         )
                     
                     if regen_result and regen_result.get("status") == "success":
-                        st.success(f"Scene {scene_num} regenerated successfully!")
+                        st.success(f"✅ Scene {scene_num} regenerated successfully with {regen_info['provider']}!")
                         time.sleep(1)
                         st.rerun()
                     else:
-                        st.error(f"Failed to regenerate scene {scene_num}")
+                        st.error(f"❌ Failed to regenerate scene {scene_num} with {regen_info['provider']}")
                 
-                # Approval form
+                # Enhanced approval form
                 st.markdown("---")
-                st.markdown("### Save Selected Scenes")
+                st.markdown("### 💾 Save Selected Scenes")
                 
                 selected_count = sum(1 for approved in approvals.values() if approved)
+                total_scenes = len(status['previews'])
+                successful_scenes = len([p for p in status['previews'] if p['preview_url']])
+                failed_scenes = total_scenes - successful_scenes
+                
+                # Enhanced statistics display
+                stats_col1, stats_col2, stats_col3, stats_col4 = st.columns(4)
+                
+                with stats_col1:
+                    st.metric("Selected", selected_count, help="Scenes selected for saving")
+                
+                with stats_col2:
+                    st.metric("Successful", successful_scenes, help="Successfully generated scenes")
+                
+                with stats_col3:
+                    st.metric("Failed", failed_scenes, help="Failed generation attempts")
+                
+                with stats_col4:
+                    st.metric("Total", total_scenes, help="Total scenes in project")
                 
                 if selected_count == 0:
-                    st.warning("No scenes selected for saving. Please select at least one scene.")
+                    st.warning("⚠️ No scenes selected for saving. Please select at least one scene.")
                 else:
-                    st.info(f"**{selected_count}** out of **{len(status['previews'])}** scenes selected for saving")
+                    st.info(f"📊 **{selected_count}** out of **{successful_scenes}** successful scenes selected for saving")
                 
-                col_save1, col_save2 = st.columns(2)
+                # Enhanced save buttons
+                col_save1, col_save2, col_save3, col_save4 = st.columns(4)
                 
                 with col_save1:
-                    if st.button("Save Selected Scenes", disabled=selected_count == 0, use_container_width=True, type="primary"):
-                        with st.spinner("Saving approved scenes..."):
+                    if st.button("💾 Save Selected Scenes", disabled=selected_count == 0, use_container_width=True, type="primary"):
+                        with st.spinner("💾 Saving approved scenes..."):
                             result = approve_previews(session_id, approvals)
                         
                         if result:
                             st.markdown(f"""
                             <div class="success-box">
-                                <h3>Scenes Saved Successfully!</h3>
-                                <p><strong>Saved Images:</strong> {result['saved_images']}</p>
-                                <p><strong>Total Scenes:</strong> {result['total_scenes']}</p>
-                                <p>Your images are now saved in the project folder!</p>
+                                <h3>🎉 Scenes Saved Successfully!</h3>
+                                <p><strong>💾 Saved Images:</strong> {result['saved_images']}</p>
+                                <p><strong>📊 Total Scenes:</strong> {result['total_scenes']}</p>
+                                <p><strong>📁 Location:</strong> Project images folder</p>
+                                <p>✅ Your images are now saved and ready to use!</p>
                             </div>
                             """, unsafe_allow_html=True)
                             
-                            
-                            navigate_to("My Projects", delay=1.5)
+                            time.sleep(2)
+                            # Navigate to projects page after saving
+                            navigate_to("My Projects", delay=0.5)
                 
                 with col_save2:
-                    if st.button("Select All", use_container_width=True):
+                    if st.button("✅ Select All Successful", use_container_width=True):
+                        # Select all successful scenes
+                        for preview in status['previews']:
+                            if preview['preview_url']:
+                                approvals[str(preview['scene_number'])] = True
                         st.rerun()
+                
+                with col_save3:
+                    if st.button("❌ Deselect All", use_container_width=True):
+                        # Deselect all scenes
+                        for preview in status['previews']:
+                            approvals[str(preview['scene_number'])] = False
+                        st.rerun()
+                
+                with col_save4:
+                    if st.button("🆕 Start New Project", use_container_width=True):
+                        start_new_project()
         
-        # Auto-refresh logic
+        # Auto-refresh logic with enhanced user feedback
         if auto_refresh and status["status"] == "generating":
-            time.sleep(1.5)
+            # Show countdown for next refresh
+            with st.empty():
+                for remaining in range(int(POLLING_INTERVAL), 0, -1):
+                    st.caption(f"🔄 Auto-refreshing in {remaining} seconds...")
+                    time.sleep(1)
             st.rerun()
 
-# Page: My Projects
+# Page: My Projects (Enhanced)
 def my_projects_page():
-    st.header("My Projects")
+    st.header("📁 My Projects")
     
     projects = load_projects()
     
     if not projects or not projects.get("projects"):
-        st.info("No projects found. Create your first project!")
+        st.info("💡 No projects found. Create your first project to get started!")
         
-        if st.button("Create New Project", use_container_width=True, type="primary"):
-            navigate_to("Create Story", delay=0.3)
+        col_empty1, col_empty2 = st.columns(2)
+        with col_empty1:
+            if st.button("🆕 Create New Project", use_container_width=True, type="primary"):
+                navigate_to("Create Story", delay=0.3)
+        with col_empty2:
+            if st.button("🔄 Refresh Projects", use_container_width=True):
+                st.cache_data.clear()
+                st.rerun()
         return
     
     project_list = projects["projects"]
-    st.success(f"Found **{len(project_list)}** projects")
+    st.success(f"📊 Found **{len(project_list)}** projects")
     
-    # Search and filter
-    col1, col2 = st.columns([3, 1])
+    # Enhanced search and filter section
+    col1, col2, col3 = st.columns([2, 1, 1])
     
     with col1:
-        search_term = st.text_input("Search projects:", placeholder="Enter project ID or keyword")
+        search_term = st.text_input("🔍 Search projects:", placeholder="Enter project ID or keyword")
     
     with col2:
-        sort_by = st.selectbox("Sort by:", ["Newest First", "Oldest First", "Most Words", "Least Words"])
+        sort_options = ["Newest First", "Oldest First", "Most Words", "Least Words", "Most Complex", "Simplest"]
+        sort_by = st.selectbox("📊 Sort by:", sort_options)
+    
+    with col3:
+        if st.button("🔄 Refresh", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
     
     # Filter and sort projects
     filtered_projects = project_list
@@ -1063,7 +1610,7 @@ def my_projects_page():
             if search_term.lower() in p['project_id'].lower()
         ]
     
-    # Sort projects
+    # Enhanced sort logic
     if sort_by == "Newest First":
         filtered_projects = sorted(filtered_projects, key=lambda x: x['created_at'], reverse=True)
     elif sort_by == "Oldest First":
@@ -1072,150 +1619,278 @@ def my_projects_page():
         filtered_projects = sorted(filtered_projects, key=lambda x: x['analysis'].get('word_count', 0), reverse=True)
     elif sort_by == "Least Words":
         filtered_projects = sorted(filtered_projects, key=lambda x: x['analysis'].get('word_count', 0))
+    elif sort_by == "Most Complex":
+        complexity_order = {"Complex": 3, "Moderate": 2, "Simple": 1}
+        filtered_projects = sorted(filtered_projects, 
+                                 key=lambda x: complexity_order.get(x['analysis'].get('complexity_score', 'Simple'), 1), 
+                                 reverse=True)
+    elif sort_by == "Simplest":
+        complexity_order = {"Complex": 3, "Moderate": 2, "Simple": 1}
+        filtered_projects = sorted(filtered_projects, 
+                                 key=lambda x: complexity_order.get(x['analysis'].get('complexity_score', 'Simple'), 1))
     
-    st.markdown(f"Showing **{len(filtered_projects)}** projects")
+    st.markdown(f"📋 Showing **{len(filtered_projects)}** projects")
     
-    # Display projects
+    if len(filtered_projects) == 0:
+        st.warning(f"🔍 No projects found matching '{search_term}'")
+        return
+    
+    # Enhanced project display
     for i, project in enumerate(filtered_projects):
+        # Determine complexity emoji
+        complexity = project['analysis'].get('complexity_score', 'Simple')
+        complexity_emoji = {"Simple": "🟢", "Moderate": "🟡", "Complex": "🔴"}.get(complexity, "⚪")
+        
         with st.expander(
-            f"**{project['project_id']}** - {project['analysis'].get('word_count', 0)} words",
-            expanded=(i < 3)
+            f"{complexity_emoji} **{project['project_id']}** - {project['analysis'].get('word_count', 0)} words | {complexity}",
+            expanded=(i < 2)  # Only expand first 2 projects
         ):
-            col1, col2 = st.columns([2, 1])
+            # Enhanced project layout
+            main_col, action_col = st.columns([3, 1])
             
-            with col1:
-                # Project details
-                created_date = project['created_at'][:19].replace('T', ' ')
+            with main_col:
+                # Project metadata in organized layout
+                meta_col1, meta_col2 = st.columns(2)
                 
-                st.markdown(f"""
-                **Created:** {created_date}  
-                **Word Count:** {project['analysis'].get('word_count', 'N/A')} words  
-                **Recommended Scenes:** {project['analysis'].get('recommended_scenes', 'N/A')} scenes  
-                **Est. Duration:** {project['analysis'].get('estimated_duration_minutes', 'N/A')} minutes  
-                **Complexity:** {project['analysis'].get('complexity_score', 'N/A')}  
-                """)
+                with meta_col1:
+                    created_date = project['created_at'][:19].replace('T', ' ')
+                    st.markdown(f"""
+                    📅 **Created:** {created_date}  
+                    📊 **Word Count:** {project['analysis'].get('word_count', 'N/A')} words  
+                    🎬 **Recommended Scenes:** {project['analysis'].get('recommended_scenes', 'N/A')} scenes  
+                    """)
                 
-                # Try to load project details to show images
+                with meta_col2:
+                    st.markdown(f"""
+                    ⏱️ **Est. Duration:** {project['analysis'].get('estimated_duration_minutes', 'N/A')} minutes  
+                    🧠 **Complexity:** {complexity_emoji} {complexity}  
+                    📝 **Project ID:** `{project['project_id']}`
+                    """)
+                
+                # Enhanced project details loading
                 try:
                     response = requests.get(f"{API_BASE_URL}/projects/{project['project_id']}", timeout=10)
                     if response.status_code == 200:
                         details = response.json()
+                        
                         if details.get('images'):
-                            st.success(f"**{len(details['images'])} images generated**")
+                            image_count = len(details['images'])
+                            st.success(f"🖼️ **{image_count} images generated** ✅")
                             
-                            # Show thumbnail gallery
-                            if len(details['images']) > 0:
-                                st.markdown("**Generated Images:**")
-                                img_cols = st.columns(min(4, len(details['images'])))
+                            # Enhanced thumbnail gallery
+                            if image_count > 0:
+                                st.markdown("**🖼️ Generated Images:**")
                                 
-                                for idx, img_path in enumerate(details['images'][:4]):
+                                # Show thumbnails in a responsive grid
+                                max_display = min(6, image_count)
+                                img_cols = st.columns(max_display)
+                                
+                                for idx, img_path in enumerate(details['images'][:max_display]):
                                     with img_cols[idx]:
                                         try:
                                             img_url = f"{API_BASE_URL}{img_path}"
                                             st.image(img_url, use_container_width=True, caption=f"Scene {idx+1}")
                                         except:
-                                            st.error("Image load failed")
+                                            st.error("❌ Image load failed")
                                 
-                                if len(details['images']) > 4:
-                                    st.caption(f"... and {len(details['images']) - 4} more images")
+                                if image_count > max_display:
+                                    st.caption(f"➕ ... and {image_count - max_display} more images")
                         else:
-                            st.info("No images generated yet")
-                except:
-                    st.warning("Could not load project details")
+                            st.info("📝 Project created - No images generated yet")
+                            
+                    else:
+                        st.warning("⚠️ Could not load full project details")
+                        
+                except requests.exceptions.Timeout:
+                    st.warning("⏱️ Project details loading timed out")
+                except Exception as e:
+                    st.error(f"❌ Error loading project: {str(e)}")
             
-            with col2:
-                st.markdown("### Actions")
+            with action_col:
+                st.markdown("### 🎯 Actions")
                 
-                # Action buttons
-                if st.button("Generate Images", key=f"gen_{project['project_id']}", use_container_width=True):
+                # Enhanced action buttons with better spacing and icons
+                if st.button("🎨 Generate Images", key=f"gen_{project['project_id']}", use_container_width=True, type="primary"):
                     st.session_state.current_project = project
+                    st.success(f"✅ Project selected: {project['project_id'][:15]}...")
+                    time.sleep(1)
                     navigate_to("Generate Images", delay=0.3)
                 
-                if st.button("Use Project", key=f"use_{project['project_id']}", use_container_width=True):
+                if st.button("📋 Use Project", key=f"use_{project['project_id']}", use_container_width=True):
                     st.session_state.current_project = project
-                    st.success(f"Selected: {project['project_id']}")
-                    time.sleep(0.5)
+                    st.success(f"✅ Selected: {project['project_id'][:15]}...")
+                    time.sleep(1)
                     st.rerun()
                 
-                if st.button("View Details", key=f"view_{project['project_id']}", use_container_width=True):
-                    # Show detailed project information
+                if st.button("👁️ View Details", key=f"view_{project['project_id']}", use_container_width=True):
+                    # Enhanced detailed view
                     try:
-                        response = requests.get(f"{API_BASE_URL}/projects/{project['project_id']}", timeout=10)
+                        response = requests.get(f"{API_BASE_URL}/projects/{project['project_id']}", timeout=15)
                         if response.status_code == 200:
                             details = response.json()
                             
-                            # Show in modal-like expander
-                            with st.expander(f"Full Details - {project['project_id']}", expanded=True):
-                                st.markdown("### Original Script")
-                                st.text_area("Script Content:", details['script'], height=200, disabled=True)
+                            # Create a detailed modal-like view
+                            st.markdown(f"---")
+                            st.markdown(f"### 📄 Full Project Details - {project['project_id']}")
+                            
+                            # Script content with enhanced styling
+                            with st.expander("📖 Original Script Content", expanded=False):
+                                script_text = details['script']
+                                word_count = len(script_text.split())
+                                st.markdown(f"**Word Count:** {word_count} words")
+                                st.text_area("Script:", script_text, height=300, disabled=True, key=f"script_detail_{project['project_id']}")
+                            
+                            # Images gallery with enhanced display
+                            if details.get('images'):
+                                st.markdown("### 🖼️ All Generated Images")
                                 
-                                if details.get('images'):
-                                    st.markdown("### All Generated Images")
+                                images = details['images']
+                                st.success(f"📊 Total images: {len(images)}")
+                                
+                                # Display images in a responsive grid
+                                cols_per_row = 3
+                                for idx in range(0, len(images), cols_per_row):
+                                    img_cols = st.columns(cols_per_row)
                                     
-                                    # Display all images in a grid
-                                    img_cols = st.columns(3)
-                                    for idx, img_path in enumerate(details['images']):
-                                        with img_cols[idx % 3]:
+                                    for col_idx, img_path in enumerate(images[idx:idx+cols_per_row]):
+                                        with img_cols[col_idx]:
                                             try:
                                                 img_url = f"{API_BASE_URL}{img_path}"
-                                                st.image(img_url, use_container_width=True, caption=f"Scene {idx+1}")
-                                            except:
-                                                st.error(f"Could not load image {idx+1}")
+                                                st.image(img_url, use_container_width=True, caption=f"Scene {idx + col_idx + 1}")
+                                                
+                                                # Download link (if possible)
+                                                st.markdown(f"[🔗 Direct Link]({img_url})")
+                                            except Exception as e:
+                                                st.error(f"❌ Could not load Scene {idx + col_idx + 1}")
+                            else:
+                                st.info("📝 No images generated for this project yet")
+                                
+                    except requests.exceptions.Timeout:
+                        st.error("⏱️ Request timed out while loading project details")
                     except Exception as e:
-                        st.error(f"Error loading project details: {str(e)}")
+                        st.error(f"❌ Error loading project details: {str(e)}")
+                
+                # Quick actions
+                st.markdown("---")
+                if st.button("🗑️ Archive", key=f"archive_{project['project_id']}", use_container_width=True, help="Archive this project (not implemented)"):
+                    st.info("🚧 Archive functionality coming soon!")
 
-# Main Navigation Router
+# Main Navigation Router with enhanced transitions
 current_page = st.session_state.current_page
 
-if current_page == "Create Story":
-    create_story_page()
-elif current_page == "Generate Images":
-    generate_images_page()
-elif current_page == "Monitor Progress":
-    monitor_progress_page()
-elif current_page == "My Projects":
-    my_projects_page()
+# Add page transition indicator
+with st.container():
+    if current_page == "Create Story":
+        create_story_page()
+    elif current_page == "Generate Images":
+        generate_images_page()
+    elif current_page == "Monitor Progress":
+        monitor_progress_page()
+    elif current_page == "My Projects":
+        my_projects_page()
 
-# Footer
+# Enhanced Footer with additional information
 st.markdown("---")
 st.markdown("""
-<div style="text-align: center; color: #666; padding: 2rem; background: linear-gradient(145deg, #f8f9fa, #e9ecef); border-radius: 10px; margin-top: 2rem;">
-    <h4>Story to Image Generator v3.0</h4>
-    <p>Powered by <strong>OpenRouter</strong>, <strong>Runware</strong> & <strong>Together AI</strong></p>
+<div style="text-align: center; color: #666; padding: 2rem; background: linear-gradient(145deg, #f8f9fa, #e9ecef); border-radius: 15px; margin-top: 2rem; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
+    <h4>🎬 Story to Image Generator v3.0</h4>
+    <p>Powered by <strong>🌐 OpenRouter</strong>, <strong>🚀 Runware</strong>, <strong>🔧 Together AI</strong> & <strong>🧠 Gemini Vision</strong></p>
     <p style="font-size: 0.9em; color: #888;">Transform your stories into stunning AI-generated images with cutting-edge technology</p>
+    <p style="font-size: 0.8em; color: #aaa;">
+        Features: Multi-Provider Image Generation | Advanced Scene Analysis | Flexible Scene Count | Enhanced UI/UX
+    </p>
 </div>
 """, unsafe_allow_html=True)
 
-# Debug Information (only show in development)
-if st.checkbox("Debug Mode", value=False):
+# Enhanced Debug Information (only show in development)
+if st.checkbox("🛠️ Debug Mode", value=False, help="Show technical information for debugging"):
     st.markdown("---")
-    st.markdown("### Debug Information")
+    st.markdown("### 🔧 Debug Information")
     
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     
     with col1:
+        st.markdown("**🧭 Navigation State:**")
         st.json({
             "current_page": st.session_state.current_page,
             "navigation_history": st.session_state.navigation_history[-3:],
             "has_current_project": st.session_state.current_project is not None,
             "has_current_session": st.session_state.current_session is not None,
+            "dark_theme": st.session_state.dark_theme
         })
     
     with col2:
+        st.markdown("**📋 Project State:**")
         if st.session_state.current_project:
             st.json({
                 "project_id": st.session_state.current_project.get("project_id"),
                 "word_count": st.session_state.current_project.get("analysis", {}).get("word_count"),
-                "recommended_scenes": st.session_state.current_project.get("analysis", {}).get("recommended_scenes")
+                "recommended_scenes": st.session_state.current_project.get("analysis", {}).get("recommended_scenes"),
+                "complexity": st.session_state.current_project.get("analysis", {}).get("complexity_score")
             })
-        
+        else:
+            st.info("No current project")
+    
+    with col3:
+        st.markdown("**⚡ Session State:**")
         if st.session_state.current_session:
             st.text(f"Session: {st.session_state.current_session}")
+            
+            # Try to get session status
+            try:
+                status = get_generation_status(st.session_state.current_session)
+                if status:
+                    st.json({
+                        "status": status.get("status"),
+                        "total_scenes": status.get("total_scenes"),
+                        "completed_scenes": status.get("completed_scenes"),
+                        "errors": len(status.get("errors", []))
+                    })
+            except:
+                st.error("Could not fetch session details")
+        else:
+            st.info("No active session")
+        
+        # Show available models info
+        if st.session_state.available_models:
+            models = st.session_state.available_models
+            st.markdown("**🤖 Available Models:**")
+            st.json({
+                "ai_models": len(models.get("ai_models", {}).get("openrouter", [])),
+                "runware_models": len(models.get("image_models", {}).get("runware", [])),
+                "together_models": len(models.get("image_models", {}).get("together", [])),
+                "openrouter_image_models": len(models.get("image_models", {}).get("openrouter_imgae", []))
+            })
     
-    # Clear session state button
-    if st.button("Clear All Session Data", type="secondary"):
-        for key in ["current_project", "current_session", "navigation_history"]:
-            if key in st.session_state:
-                del st.session_state[key]
-        st.session_state.current_page = "Create Story"
-        st.rerun()
+    # Enhanced session management
+    st.markdown("### 🧹 Session Management")
+    col_debug1, col_debug2, col_debug3 = st.columns(3)
+    
+    with col_debug1:
+        if st.button("🗑️ Clear All Session Data", type="secondary", use_container_width=True):
+            keys_to_clear = ["current_project", "current_session", "navigation_history", "project_creation_result", "example_story", "example_title"]
+            for key in keys_to_clear:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.session_state.current_page = "Create Story"
+            st.session_state.navigation_history = ["Create Story"]
+            st.success("✅ All session data cleared!")
+            time.sleep(1)
+            st.rerun()
+    
+    with col_debug2:
+        if st.button("🔄 Clear Cache", use_container_width=True):
+            st.cache_data.clear()
+            st.success("✅ Cache cleared!")
+            time.sleep(1)
+            st.rerun()
+    
+    with col_debug3:
+        if st.button("🌐 Test Backend", use_container_width=True):
+            health = check_backend_health()
+            if health["healthy"]:
+                st.success("✅ Backend is healthy!")
+                if "data" in health:
+                    st.json(health["data"])
+            else:
+                st.error(f"❌ Backend error: {health['error']}")
