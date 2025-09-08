@@ -289,7 +289,7 @@ def generate_images_page():
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        ai_models = models.get("ai_models", {}).get("openrouter", ["fallback"])
+        ai_models = models.get("ai_models", {}).get("Openai", ["fallback"])
         ai_model = st.selectbox("AI Model:", ai_models, key="ai_model_select")
     
     with col2:
@@ -316,7 +316,7 @@ def generate_images_page():
             "project_id": project.get('project_id'),
             "num_scenes": num_scenes,
             "media_type": media_type,
-            "ai_provider": "openrouter",
+            "ai_provider": "Openai",
             "ai_model": ai_model,
             "image_provider": image_provider,
             "image_model": image_model,
@@ -535,6 +535,6 @@ st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: #666; padding: 1rem;">
     <h4>🎬 Story to Image Generator v3.0</h4>
-    <p>Powered by OpenRouter, Runware & Together AI</p>
+    <p>Powered by Openai, Runware & Together AI</p>
 </div>
 """, unsafe_allow_html=True)

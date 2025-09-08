@@ -30,7 +30,7 @@ CONFIG = {
             "black-forest-labs/FLUX.1-standard-Pro"
         ]
     },
-    "openrouter": {
+    "Openai": {
         "api_key": os.getenv("OPENAI_API_KEY", "your_key_here"),
         "api_url": "https://api.openai.com/v1/chat/completions",
         "models": [

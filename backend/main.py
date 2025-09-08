@@ -16,7 +16,7 @@ from .models.schemas import (
 )
 from .models.session_manager import get_session, set_session, delete_session, count_sessions
 from .utils.script_analysis import analyze_script, create_project
-from .utils.prompt_generation import generate_scene_prompts_openrouter, generate_fallback_scenes
+from .utils.prompt_generation import generate_scene_prompts_Openai, generate_fallback_scenes
 from .utils.image_generation import generate_image_with_retry
 from .utils.storage import save_scene_prompts, save_approved_images
 
@@ -28,13 +28,13 @@ async def lifespan(app: FastAPI):
     providers = {
         "Runware": CONFIG["runware"]["api_key"] != "your_key_here",
         "Together AI": CONFIG["together"]["api_key"] != "your_key_here", 
-        "OpenRouter": CONFIG["openrouter"]["api_key"] != "your_key_here",
+        "Openai": CONFIG["Openai"]["api_key"] != "your_key_here",
     }
     for name, available in providers.items():
         print(f"{'✅' if available else '❌'} {name}")
 
-    print("\n🧠 Available AI Models (OpenRouter):")
-    for model in CONFIG["openrouter"]["models"]:
+    print("\n🧠 Available AI Models (Openai):")
+    for model in CONFIG["Openai"]["models"]:
         print(f"  • {model}")
 
     print("\n🎨 Image Models:")
@@ -76,7 +76,7 @@ async def root():
 @app.get("/models")
 async def get_available_models():
     return {
-        "ai_models": {"openrouter": CONFIG["openrouter"]["models"]},
+        "ai_models": {"Openai": CONFIG["Openai"]["models"]},
         "image_models": {
             "runware": CONFIG["runware"]["models"], 
             "together": CONFIG["together"]["models"],        }
@@ -111,8 +111,8 @@ async def generate_previews(request: GenerationRequest, background_tasks: Backgr
         raise HTTPException(status_code=404, detail="Script file not found")
 
     # Generate scene prompts
-    if request.ai_provider == "openrouter":
-        scenes = generate_scene_prompts_openrouter(
+    if request.ai_provider == "Openai":
+        scenes = generate_scene_prompts_Openai(
             script, request.num_scenes, request.media_type, request.ai_model
         )
     else:
@@ -284,5 +284,5 @@ if __name__ == "__main__":
     print("🎬 Starting Story to Image Generator API ...")
     print("📦 Install dependencies: pip install -r requirements.txt")
     print("🔑 Set environment: OPENAI_API_KEY, RUNWARE_API_KEY, TOGETHER_API_KEY")
-    print("🌐 Providers: Runware, Together; LLM: OpenRouter")
+    print("🌐 Providers: Runware, Together; LLM: Openai")
     uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)

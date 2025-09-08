@@ -2,7 +2,7 @@
 Story to Image Generator API Backend
 
 A FastAPI-based service that transforms stories and scripts into AI-generated images.
-Features include script analysis, scene prompt generation using OpenRouter LLMs,
+Features include script analysis, scene prompt generation using Openai LLMs,
 and image generation using Runware and Together AI providers.
 """
 

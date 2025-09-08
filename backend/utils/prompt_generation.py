@@ -42,13 +42,13 @@ Return valid JSON in this exact format:
 Important: Make sure each image_prompt is detailed and includes visual elements like lighting, composition, colors, mood, and style.
 """.strip()
 
-def generate_scene_prompts_openrouter(
+def generate_scene_prompts_Openai(
     script: str, 
     num_scenes: int, 
     media_type: str, 
     model: str
 ) -> List[ScenePrompt]:
-    """Generate scene prompts using OpenRouter API."""
+    """Generate scene prompts using Openai API."""
     prompt = build_prompt(script, num_scenes, media_type)
 
     payload = {
@@ -59,13 +59,13 @@ def generate_scene_prompts_openrouter(
     }
     
     headers = {
-        "Authorization": f"Bearer {CONFIG['openrouter']['api_key']}",
+        "Authorization": f"Bearer {CONFIG['Openai']['api_key']}",
         "Content-Type": "application/json"
     }
     
     try:
         response = requests.post(
-            CONFIG["openrouter"]["api_url"], 
+            CONFIG["Openai"]["api_url"], 
             headers=headers, 
             json=payload, 
             timeout=TIMEOUT
@@ -84,13 +84,13 @@ def generate_scene_prompts_openrouter(
         return [ScenePrompt(**scene) for scene in data["scenes"]]
         
     except requests.exceptions.RequestException as e:
-        print(f"OpenRouter API error: {e}")
+        print(f"Openai API error: {e}")
         return generate_fallback_scenes(script, num_scenes, media_type)
     except (json.JSONDecodeError, KeyError) as e:
-        print(f"OpenRouter response parsing error: {e}")
+        print(f"Openai response parsing error: {e}")
         return generate_fallback_scenes(script, num_scenes, media_type)
     except Exception as e:
-        print(f"OpenRouter unexpected error: {e}")
+        print(f"Openai unexpected error: {e}")
         return generate_fallback_scenes(script, num_scenes, media_type)
 
 def generate_fallback_scenes(script: str, num_scenes: int, media_type: str) -> List[ScenePrompt]:

@@ -28,9 +28,9 @@ class GenerationRequest(BaseModel):
     project_id: str
     num_scenes: int
     media_type: str = "cinematic"      # "cinematic", "cartoon", "realistic", "artistic"
-    ai_provider: str = "openrouter"    # "openrouter", "fallback"
+    ai_provider: str = "Openai"    # "Openai", "fallback"
     ai_model: str = "openai/gpt-4o-mini"
-    image_provider: str = "runware"    # "runware", "together", "openrouter_imgae"
+    image_provider: str = "runware"    # "runware", "together"
     image_model: str = "runware:101@1"
 
 class RegenerationRequest(BaseModel):
