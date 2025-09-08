@@ -92,21 +92,32 @@ def load_models() -> Optional[Dict]:
         return None
 
 def api_request(endpoint: str, method: str = "GET", data: Dict = None, timeout: int = 30) -> Optional[Dict]:
-    """Generic API request handler"""
+    """Generic API request handler with improved error handling"""
     try:
+        # Ensure endpoint doesn't start with /
+        if endpoint.startswith('/'):
+            endpoint = endpoint[1:]
+            
         url = f"{API_BASE_URL}/{endpoint}"
+        
         if method == "GET":
             response = requests.get(url, timeout=timeout)
         elif method == "POST":
             response = requests.post(url, json=data, timeout=timeout)
+        elif method == "DELETE":
+            response = requests.delete(url, timeout=timeout)
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
         
         if response.status_code == 200:
             return response.json()
+        elif response.status_code == 404:
+            st.error(f"Resource not found: {endpoint}")
+            return None
         else:
             st.error(f"Request failed: {response.status_code} - {response.text}")
             return None
+            
     except requests.exceptions.Timeout:
         st.error("Request timed out. Please try again.")
         return None
@@ -448,7 +459,7 @@ def monitor_progress_page():
                 st.rerun()
 
 def my_projects_page():
-    """My Projects page"""
+    """My Projects page - Fixed version"""
     st.header("📁 My Projects")
     
     projects = api_request("projects")
@@ -504,23 +515,29 @@ def my_projects_page():
                 ⏱️ **Est. Duration:** {estimated_duration} min
                 """)
                 
-                # Load project details
-                details = api_request(f"projects/{project_id}")
-                if details and details.get('images'):
-                    image_count = len(details['images'])
-                    st.success(f"🖼️ {image_count} images generated")
-                    
-                    # Show thumbnails
-                    images_to_show = details['images'][:4]
-                    if images_to_show:
-                        img_cols = st.columns(min(4, len(images_to_show)))
-                        for idx, img_path in enumerate(images_to_show):
-                            with img_cols[idx]:
-                                try:
-                                    full_img_url = f"{API_BASE_URL}{img_path}"
-                                    st.image(full_img_url, use_container_width=True)
-                                except Exception as e:
-                                    st.error("❌ Image load failed")
+                # Load project details with proper error handling
+                try:
+                    details = api_request(f"projects/{project_id}")
+                    if details and details.get('images'):
+                        image_count = len(details['images'])
+                        st.success(f"🖼️ {image_count} images generated")
+                        
+                        # Show thumbnails
+                        images_to_show = details['images'][:4]
+                        if images_to_show:
+                            img_cols = st.columns(min(4, len(images_to_show)))
+                            for idx, img_path in enumerate(images_to_show):
+                                with img_cols[idx]:
+                                    try:
+                                        full_img_url = f"{API_BASE_URL}{img_path}"
+                                        st.image(full_img_url, use_container_width=True)
+                                    except Exception as e:
+                                        st.error("❌ Image load failed")
+                    else:
+                        st.info("📝 No images generated yet")
+                        
+                except Exception as e:
+                    st.warning(f"⚠️ Could not load project details: {str(e)}")
             
             with col2:
                 if st.button("🎨 Generate Images", key=f"gen_{project_id}_{i}", 
@@ -532,7 +549,6 @@ def my_projects_page():
                            use_container_width=True):
                     st.session_state.current_project = project
                     st.rerun()
-
 # Main Router
 pages = {
     "Create Story": create_story_page,

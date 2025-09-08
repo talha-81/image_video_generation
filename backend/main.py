@@ -1,3 +1,6 @@
+# Complete fix for backend/main.py
+# Replace your existing main.py with this corrected version
+
 import uuid
 import json
 from datetime import datetime
@@ -259,6 +262,13 @@ async def get_project_details(project_id: str):
         raise HTTPException(status_code=404, detail="Project not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error loading project: {str(e)}")
+
+# NEW: Add catch-all route for direct project access (fixes the 404 issue)
+@app.get("/story_{timestamp}")
+async def get_story_project_direct(timestamp: str):
+    """Handle direct story project access - common cause of 404 errors"""
+    project_id = f"story_{timestamp}"
+    return await get_project_details(project_id)
 
 @app.delete("/sessions/{session_id}")
 async def cleanup_session(session_id: str):
