@@ -552,7 +552,7 @@ else:
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: #666; padding: 1rem;">
-    <h4>🎬 Story to Image Generator v3.0</h4>
+    <h4>🎬 Story to Image Generator</h4>
     <p>Powered by Openai, Runware & Together AI</p>
 </div>
 """, unsafe_allow_html=True)
