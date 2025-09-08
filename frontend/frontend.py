@@ -239,8 +239,16 @@ def create_story_page():
                     if result:
                         st.session_state.current_project = result
                         st.session_state.project_creation_result = result
-                        word_count = result.get('analysis', {}).get('word_count', 0)
-                        st.success(f"🎉 Project created! Word count: {word_count}")
+                        
+                        # ✅ Save analysis summary for later
+                        analysis = result.get("analysis", {})
+                        st.session_state.analysis_summary = {
+                            "Word Count": analysis.get("word_count", 0),
+                            "Recommended Scenes": analysis.get("recommended_scenes", 4),
+                            "Estimated Time": f"{analysis.get('estimated_duration_minutes', 0)} min"
+                        }
+
+                        st.success(f"🎉 Project created! Word count: {analysis.get('word_count', 0)}")
                         time.sleep(1)
                         navigate_to("Generate Images")
     
@@ -248,14 +256,14 @@ def create_story_page():
         st.markdown("### 💡 Tips")
         st.info("""
         **Visual Descriptions:**
-        • Use rich, descriptive language
-        • Include colors and atmosphere
-        • Describe characters and settings
-        
-        **Length Guide:**
-        • Short: 50-100 words (2-4 scenes)
-        • Medium: 100-300 words (4-8 scenes)
-        • Long: 300+ words (8+ scenes)
+        • Use rich, descriptive language  
+        • Include colors and atmosphere  
+        • Describe characters and settings  
+
+        **Length Guide:**  
+        • Short: 50-100 words (2-4 scenes)  
+        • Medium: 100-300 words (4-8 scenes)  
+        • Long: 300+ words (8+ scenes)  
         """)
 
 def generate_images_page():
@@ -272,9 +280,19 @@ def generate_images_page():
         return
     
     project = st.session_state.current_project
-    project_id = project.get('project_id', 'Unknown')
-    word_count = project.get('analysis', {}).get('word_count', 0)
-    st.success(f"📋 Project: {project_id} ({word_count} words)")
+    project_id = project.get("project_id", "Unknown")
+
+    # ✅ Show analysis summary
+    st.markdown("#### 📊 Project Analysis")
+    summary = st.session_state.get("analysis_summary", {})
+    if summary:
+        cols = st.columns(len(summary))
+        for idx, (label, value) in enumerate(summary.items()):
+            cols[idx].metric(label, value)
+    else:
+        st.info("No analysis summary available.")
+
+    st.success(f"📋 Project: {project_id}")
     
     models = st.session_state.available_models
     if not models:
@@ -307,13 +325,13 @@ def generate_images_page():
                                  ["cinematic", "cartoon", "realistic", "artistic"], key="media_type_select")
     
     with col4:
-        recommended = project.get('analysis', {}).get('recommended_scenes', 4)
+        recommended = project.get("analysis", {}).get("recommended_scenes", 4)
         num_scenes = st.number_input("Number of scenes:", 
                                     min_value=1, max_value=50, value=recommended, key="num_scenes_input")
     
     if st.button("🚀 Generate Scene Previews", use_container_width=True, type="primary"):
         payload = {
-            "project_id": project.get('project_id'),
+            "project_id": project.get("project_id"),
             "num_scenes": num_scenes,
             "media_type": media_type,
             "ai_provider": "Openai",
