@@ -31,21 +31,14 @@ CONFIG = {
         ]
     },
     "openrouter": {
-        "api_key": os.getenv("OPENROUTER_API_KEY", "your_key_here"),
+        "api_key": os.getenv("OPENAI_API_KEY", "your_key_here"),
         "api_url": "https://api.openai.com/v1/chat/completions",
         "models": [
             "gpt-4o-mini",
             "gpt-4.1-mini"
         ]
-    },
-    "openrouter_imgae": {
-        "api_key": os.getenv("OPENROUTER_API_KEY", "your_key_here"),
-        "api_url": "https://api.openai.com/v1/chat/completions",
-        "models": [
-            "google/gemini-2.5-flash-image-preview:pro",
-            "google/gemini-2.5-flash-image-preview:free"
-        ]
     }
+
 }
 
 # Runtime configuration

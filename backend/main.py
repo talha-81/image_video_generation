@@ -29,7 +29,6 @@ async def lifespan(app: FastAPI):
         "Runware": CONFIG["runware"]["api_key"] != "your_key_here",
         "Together AI": CONFIG["together"]["api_key"] != "your_key_here", 
         "OpenRouter": CONFIG["openrouter"]["api_key"] != "your_key_here",
-        "OpenRouter Image": CONFIG["openrouter_imgae"]["api_key"] != "your_key_here"
     }
     for name, available in providers.items():
         print(f"{'✅' if available else '❌'} {name}")
@@ -45,10 +44,6 @@ async def lifespan(app: FastAPI):
     print("  Together AI:")
     for model in CONFIG["together"]["models"]:
         print(f"  • {model}")
-    print("  OpenRouter Image:")
-    for model in CONFIG["openrouter_imgae"]["models"]:
-        print(f"  • {model}")
-
 
     yield
     print("🛑 Shutting down...")
@@ -73,7 +68,7 @@ app.mount("/projects", StaticFiles(directory=PROJECTS_DIR), name="projects")
 @app.get("/")
 async def root():
     return {
-        "message": "Story to Image Generator API v3.0 (OpenRouter)",
+        "message": "Story to Image Generator API ",
         "status": "ready",
         "active_sessions": count_sessions()
     }
@@ -84,9 +79,7 @@ async def get_available_models():
         "ai_models": {"openrouter": CONFIG["openrouter"]["models"]},
         "image_models": {
             "runware": CONFIG["runware"]["models"], 
-            "together": CONFIG["together"]["models"],
-            "openrouter_imgae": CONFIG["openrouter_imgae"]["models"]
-        }
+            "together": CONFIG["together"]["models"],        }
     }
 
 @app.post("/analyze-script", response_model=ProjectInfo)
@@ -288,8 +281,8 @@ async def health_check():
     }
 
 if __name__ == "__main__":
-    print("🎬 Starting Story to Image Generator API (OpenRouter)...")
+    print("🎬 Starting Story to Image Generator API ...")
     print("📦 Install dependencies: pip install -r requirements.txt")
-    print("🔑 Set environment: OPENROUTER_API_KEY, RUNWARE_API_KEY, TOGETHER_API_KEY")
+    print("🔑 Set environment: OPENAI_API_KEY, RUNWARE_API_KEY, TOGETHER_API_KEY")
     print("🌐 Providers: Runware, Together; LLM: OpenRouter")
     uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)

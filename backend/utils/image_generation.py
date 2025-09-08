@@ -84,49 +84,7 @@ def generate_image_together(scene: ScenePrompt, model: str) -> Optional[str]:
         print(f"Together AI unexpected error: {e}")
     
     return None
-def generate_image_openrouter_image(scene: ScenePrompt, model: str) -> Optional[str]:
-    """Generate image using OpenRouter Image API."""
-    try:
-        payload = {
-            "model": model,
-            "messages": [
-                {
-                    "role": "user", 
-                    "content": f"Generate an image based on this description: {scene.image_prompt}"
-                }
-            ],
-            "max_tokens": 10000
-        }
-        
-        headers = {
-            "Authorization": f"Bearer {CONFIG['openrouter_imgae']['api_key']}",
-            "Content-Type": "application/json"
-        }
-        
-        response = requests.post(
-            CONFIG["openrouter_imgae"]["api_url"], 
-            headers=headers, 
-            json=payload, 
-            timeout=TIMEOUT
-        )
-        
-        if response.status_code == 200:
-            data = response.json()
-            if "choices" in data and data["choices"]:
-                # Extract image URL from response (this may need adjustment based on actual API response)
-                choice = data["choices"][0]
-                if "message" in choice and "content" in choice["message"]:
-                    content = choice["message"]["content"]
-                    # Parse content to extract image URL if it's returned as text
-                    # This implementation may need adjustment based on actual OpenRouter image API response format
-                    return content if content.startswith("http") else None
-                    
-    except requests.exceptions.RequestException as e:
-        print(f"OpenRouter Image API request error: {e}")
-    except Exception as e:
-        print(f"OpenRouter Image unexpected error: {e}")
-    
-    return None
+
 def generate_image_with_retry(scene: ScenePrompt, provider: str, model: str) -> PreviewImage:
     """Generate image with retry logic."""
     start_time = time.time()
@@ -138,8 +96,7 @@ def generate_image_with_retry(scene: ScenePrompt, provider: str, model: str) -> 
                 url = generate_image_runware(scene, model)
             elif provider == "together":
                 url = generate_image_together(scene, model)
-            elif provider == "openrouter_imgae":
-                url = generate_image_openrouter_image(scene, model)
+                
             else:
                 url = None
                 last_error = f"Unknown provider: {provider}"
