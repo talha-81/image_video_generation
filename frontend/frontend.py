@@ -362,7 +362,7 @@ def generate_images_page():
             navigate_to("Monitor Progress")
 
 def monitor_progress_page():
-    """Monitor Progress page"""
+    """Monitor Progress page with regenerate functionality"""
     st.header("📊 Monitor Generation Progress")
     
     session_id = st.text_input("🔍 Session ID:", 
@@ -397,7 +397,12 @@ def monitor_progress_page():
         col3.metric("Total Scenes", total_scenes)
         col4.metric("Errors", len(status.get("errors", [])))
         
-        # Display previews
+        # Get available models for regeneration
+        models = st.session_state.available_models
+        if not models:
+            models = load_models()
+        
+        # Display previews with regenerate options
         if status.get("previews"):
             st.markdown("---")
             st.subheader("🖼️ Generated Previews")
@@ -412,51 +417,219 @@ def monitor_progress_page():
                 with cols[i % 2]:
                     scene_number = preview.get('scene_number', i+1)
                     scene_title = preview.get('scene_title', f'Scene {scene_number}')
-                    st.markdown(f"### 🎬 Scene {scene_number}: {scene_title}")
+                    
+                    # Scene header with status indicator
+                    if preview.get("preview_url"):
+                        status_icon = "✅"
+                        status_color = "green"
+                    else:
+                        status_icon = "❌"
+                        status_color = "red"
+                    
+                    st.markdown(f"""
+                    <div style="background: rgba(0,0,0,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                        <h4 style="margin: 0; color: {status_color};">
+                            {status_icon} Scene {scene_number}: {scene_title}
+                        </h4>
+                    </div>
+                    """, unsafe_allow_html=True)
                     
                     if preview.get("preview_url"):
+                        # Display image
                         try:
                             st.image(preview["preview_url"], use_container_width=True)
+                            
+                            # Image info
+                            provider = preview.get('provider_used', 'Unknown')
+                            model = preview.get('model_used', 'Unknown')
+                            gen_time = preview.get('generation_time', 0)
+                            
+                            st.caption(f"🎨 {provider} | 🤖 {model} | ⏱️ {gen_time:.1f}s")
+                            
+                            # Approval checkbox
                             approvals[str(scene_number)] = st.checkbox(
                                 f"✅ Save Scene {scene_number}", 
                                 value=True,
                                 key=f"approve_{scene_number}_{session_id}_{i}"
                             )
+                            
                         except Exception as e:
                             st.error(f"❌ Failed to load image: {str(e)}")
                             approvals[str(scene_number)] = False
                     else:
+                        # Failed generation - show error
                         error_msg = preview.get('error', 'Unknown error')
                         st.error(f"❌ Generation failed: {error_msg}")
                         approvals[str(scene_number)] = False
+                    
+                    # Regenerate section (always available)
+                    with st.expander(f"🔄 Regenerate Scene {scene_number}", expanded=False):
+                        st.markdown("### Regeneration Options")
+                        
+                        # Provider selection
+                        regen_col1, regen_col2 = st.columns(2)
+                        
+                        with regen_col1:
+                            regen_provider = st.selectbox(
+                                "Image Provider:", 
+                                ["runware", "together"], 
+                                key=f"regen_provider_{scene_number}_{i}",
+                                index=0
+                            )
+                        
+                        with regen_col2:
+                            if models and models.get("image_models"):
+                                provider_models = models["image_models"].get(regen_provider, [])
+                                if provider_models:
+                                    regen_model = st.selectbox(
+                                        f"{regen_provider.title()} Model:", 
+                                        provider_models,
+                                        key=f"regen_model_{scene_number}_{i}"
+                                    )
+                                else:
+                                    st.error(f"❌ No models available for {regen_provider}")
+                                    regen_model = None
+                            else:
+                                st.error("❌ Models not loaded")
+                                regen_model = None
+                        
+                        # Regenerate button
+                        if regen_model:
+                            regen_key = f"regenerate_{scene_number}_{session_id}_{i}"
+                            if st.button(
+                                f"🚀 Regenerate Scene {scene_number}", 
+                                key=regen_key,
+                                use_container_width=True,
+                                type="secondary"
+                            ):
+                                with st.spinner(f"🔄 Regenerating scene {scene_number}..."):
+                                    regen_payload = {
+                                        "session_id": session_id,
+                                        "scene_number": scene_number,
+                                        "image_provider": regen_provider,
+                                        "image_model": regen_model
+                                    }
+                                    
+                                    regen_result = api_request(
+                                        "regenerate-scene", 
+                                        "POST", 
+                                        regen_payload, 
+                                        timeout=120
+                                    )
+                                
+                                if regen_result:
+                                    if regen_result.get("status") == "success":
+                                        st.success(f"✅ Scene {scene_number} regenerated successfully!")
+                                        # Force refresh to show new image
+                                        time.sleep(1)
+                                        st.rerun()
+                                    else:
+                                        st.error(f"❌ Regeneration failed for scene {scene_number}")
+                                        if regen_result.get("new_preview", {}).get("error"):
+                                            st.error(f"Error: {regen_result['new_preview']['error']}")
+                                else:
+                                    st.error("❌ Regeneration request failed")
+                        
+                        # Show current prompt for reference
+                        if preview.get("prompt"):
+                            st.markdown("**Current Prompt:**")
+                            st.code(preview["prompt"], language="text")
             
-            # Save approved scenes
+            # Batch operations section
             if status.get("status") in ["previewing", "completed"]:
                 st.markdown("---")
-                selected_count = sum(1 for approved in approvals.values() if approved)
-                st.info(f"📊 {selected_count} scenes selected for saving")
+                st.subheader("📦 Batch Operations")
                 
-                if st.button("💾 Save Selected Scenes", disabled=selected_count == 0, 
-                           use_container_width=True, type="primary", key="save_scenes_button"):
-                    with st.spinner("💾 Saving scenes..."):
-                        result = api_request("approve-previews", "POST", 
-                                           {"session_id": session_id, "scene_approvals": approvals})
-                    
-                    if result:
-                        saved_count = result.get('saved_images', selected_count)
-                        st.success(f"🎉 Saved {saved_count} images!")
-                        time.sleep(1)
-                        navigate_to("My Projects")
+                selected_count = sum(1 for approved in approvals.values() if approved)
+                failed_count = len([p for p in sorted_previews if not p.get("preview_url")])
+                
+                # Statistics
+                batch_col1, batch_col2, batch_col3, batch_col4 = st.columns(4)
+                batch_col1.metric("Total Scenes", len(sorted_previews))
+                batch_col2.metric("Selected", selected_count)
+                batch_col3.metric("Failed", failed_count)
+                batch_col4.metric("Success Rate", f"{int(((len(sorted_previews)-failed_count)/len(sorted_previews))*100)}%")
+                
+                # Action buttons
+                action_col1, action_col2, action_col3 = st.columns(3)
+                
+                with action_col1:
+                    if st.button("💾 Save Selected Scenes", 
+                               disabled=selected_count == 0, 
+                               use_container_width=True, 
+                               type="primary"):
+                        with st.spinner("💾 Saving scenes..."):
+                            result = api_request("approve-previews", "POST", 
+                                               {"session_id": session_id, "scene_approvals": approvals})
+                        
+                        if result:
+                            saved_count = result.get('saved_images', selected_count)
+                            st.success(f"🎉 Saved {saved_count} images!")
+                            time.sleep(1)
+                            navigate_to("My Projects")
+                
+                with action_col2:
+                    if failed_count > 0:
+                        if st.button("🔄 Regenerate All Failed", 
+                                   use_container_width=True, 
+                                   type="secondary"):
+                            st.info("🔄 Batch regeneration would be implemented here")
+                            st.caption("This would regenerate all failed scenes with default settings")
+                
+                with action_col3:
+                    if st.button("✅ Select All Success", 
+                               use_container_width=True, 
+                               type="secondary"):
+                        st.info("This would select all successfully generated scenes")
+                        st.rerun()
+        
+        # Show errors if any
+        if status.get("errors"):
+            st.markdown("---")
+            st.subheader("⚠️ Generation Errors")
+            for error in status["errors"]:
+                st.error(error)
         
         # Auto-refresh logic
         if auto_refresh and status.get("status") == "generating":
-            # Add a small delay to prevent too frequent refreshes
             current_time = time.time()
             if (st.session_state.last_refresh is None or 
                 current_time - st.session_state.last_refresh > POLLING_INTERVAL):
                 st.session_state.last_refresh = current_time
                 time.sleep(POLLING_INTERVAL)
                 st.rerun()
+    
+    # Quick actions sidebar
+    st.markdown("---")
+    st.subheader("🔧 Quick Actions")
+    
+    quick_col1, quick_col2, quick_col3 = st.columns(3)
+    
+    with quick_col1:
+        if st.button("🗑️ Clear Session", use_container_width=True):
+            if session_id:
+                result = api_request(f"sessions/{session_id}", "DELETE")
+                if result:
+                    st.success("🗑️ Session cleared!")
+                    st.session_state.current_session = None
+                    st.rerun()
+    
+    with quick_col2:
+        if st.button("📊 Session Info", use_container_width=True):
+            if session_id and status:
+                st.json({
+                    "Session ID": session_id,
+                    "Project ID": status.get("project_id", "Unknown"),
+                    "Status": status.get("status", "Unknown"),
+                    "Total Scenes": status.get("total_scenes", 0),
+                    "Completed": status.get("completed_scenes", 0),
+                    "Errors": len(status.get("errors", []))
+                })
+    
+    with quick_col3:
+        if st.button("🔄 Force Refresh", use_container_width=True):
+            st.session_state.last_refresh = None
+            st.rerun()
 
 def my_projects_page():
     """My Projects page - Fixed version"""

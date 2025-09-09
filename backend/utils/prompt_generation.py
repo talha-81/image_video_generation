@@ -21,11 +21,12 @@ Style: {style}
 
 Script: {script}
 
-For each scene in the story, create a detailed image generation prompt that vividly captures the essence of that moment. 
-Ensure that the characters, their physical traits, outfits, and accessories remain consistent across all scenes.
-Always reference the description of characters and settings from the previous scenes to maintain continuity.
-The world, environment, lighting, and style should evolve naturally with the story while preserving the same artistic look.
-Each prompt should feel cinematic, immersive, and sequential—like frames of a movie rather than unrelated images.
+For each distinct scene in the provided story, craft a highly detailed and evocative prompt suitable for an AI image generation model.
+This prompt must encapsulate the core narrative moment with vivid sensory details, emotional depth, and atmospheric nuance to ensure a compelling visual representation.
+Maintain absolute consistency in character depictions across all scenes: adhere strictly to established physical attributes (such as age, build, hair color and style, facial features, skin tone, and expressions), clothing (including specific garments, colors, fabrics, and wear patterns), and accessories (like jewelry, tools, or props).
+Cross-reference descriptions from prior scenes to reinforce continuity, avoiding any deviations that could disrupt the cohesive visual narrative.
+Incorporate the story's evolving world and settings with seamless progression: allow environments, lighting conditions (e.g., time of day, weather, or artificial sources), and stylistic elements (e.g., color palette, mood, or artistic influences) to develop organically in alignment with the plot, while upholding a unified overarching aesthetic—such as a consistent art style, composition framing, or visual tone—to evoke a serialized cinematic experience.
+Structure each prompt to feel like a sequential frame from a feature film: emphasize dynamic composition, camera angles (e.g., wide shots for establishing scenes, close-ups for intimate moments), focal points, depth of field, and immersive details that build tension, emotion, or progression, ensuring the series of images forms a fluid, interconnected visual storyline rather than isolated snapshots.
 
 Return valid JSON in this exact format:
 {{
